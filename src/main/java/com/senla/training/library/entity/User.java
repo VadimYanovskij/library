@@ -27,44 +27,44 @@ public class User {
     private Set<Role> roles;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
 
     @Basic
-    @Column(name = "username", nullable = false, length = 45)
+    @Column(name = "username")
     public String getUsername() {
         return username;
     }
 
     @Basic
-    @Column(name = "email", nullable = false, length = 64)
+    @Column(name = "email")
     public String getEmail() {
         return email;
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 256)
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
 
     @Basic
-    @Column(name = "firstname", nullable = false, length = 45)
+    @Column(name = "firstname")
     public String getFirstname() {
         return firstname;
     }
 
     @Basic
-    @Column(name = "lastname", nullable = false, length = 45)
+    @Column(name = "lastname")
     public String getLastname() {
         return lastname;
     }
 
     @Basic
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "birthday")
     public LocalDate getBirthday() {
         return birthday;
     }

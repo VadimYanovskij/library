@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -16,9 +17,9 @@ public class Borrow {
     private Integer id;
     private User user;
     private Book book;
-    private Date borrowDate;
+    private LocalDate borrowDate;
     private Integer period;
-    private Date returnDate;
+    private LocalDate returnDate;
 
     @Id
     @Column(name = "id")
@@ -41,7 +42,7 @@ public class Borrow {
 
     @Basic
     @Column(name = "borrow_date")
-    public Date getBorrowDate() {
+    public LocalDate getBorrowDate() {
         return borrowDate;
     }
 
@@ -53,7 +54,7 @@ public class Borrow {
 
     @Basic
     @Column(name = "return_date")
-    public Date getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
