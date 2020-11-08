@@ -5,17 +5,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-@Table(name = "category", schema = "library")
-public class CategoryEntity {
+@Table(name = "author", schema = "library")
+public class Author {
     private Integer id;
-    private Integer parentId;
-    private String categoryName;
+    private String firstname;
+    private String lastname;
 
     @Id
     @Column(name = "id")
@@ -25,15 +24,15 @@ public class CategoryEntity {
     }
 
     @Basic
-    @Column(name = "parent_id")
-    public Integer getParentId() {
-        return parentId;
+    @Column(name = "firstname")
+    public String getFirstname() {
+        return firstname;
     }
 
     @Basic
-    @Column(name = "category_name")
-    public String getCategoryName() {
-        return categoryName;
+    @Column(name = "lastname")
+    public String getLastname() {
+        return lastname;
     }
 
 }

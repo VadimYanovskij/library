@@ -12,10 +12,10 @@ import java.sql.Date;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "borrow", schema = "library")
-public class BorrowEntity {
+public class Borrow {
     private Integer id;
-    private UserEntity userByUserId;
-    private BookEntity bookByBookId;
+    private User user;
+    private Book book;
     private Date borrowDate;
     private Integer period;
     private Date returnDate;
@@ -29,14 +29,14 @@ public class BorrowEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    public UserEntity getUserByUserId() {
-        return userByUserId;
+    public User getUser() {
+        return user;
     }
 
     @ManyToOne
     @JoinColumn(name = "book_id", referencedColumnName = "id")
-    public BookEntity getBookByBookId() {
-        return bookByBookId;
+    public Book getBook() {
+        return book;
     }
 
     @Basic

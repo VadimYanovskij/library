@@ -5,20 +5,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "book", schema = "library")
-public class BookEntity {
+public class Book {
     private Integer id;
-    private AuthorEntity authorByAuthorId;
-    private PublisherEntity publisherByPublisherId;
+    private Author author;
+    private Publisher publisher;
     private Integer publicationYear;
-    private CategoryEntity categoryByCategoryId;
-    private BookStatusEntity bookStatusByBookStatusId;
+    private Category category;
+    private BookStatus bookStatus;
 
     @Id
     @Column(name = "id")
@@ -29,14 +28,14 @@ public class BookEntity {
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    public AuthorEntity getAuthorByAuthorId() {
-        return authorByAuthorId;
+    public Author getAuthor() {
+        return author;
     }
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
-    public PublisherEntity getPublisherByPublisherId() {
-        return publisherByPublisherId;
+    public Publisher getPublisher() {
+        return publisher;
     }
 
     @Basic
@@ -47,14 +46,14 @@ public class BookEntity {
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    public CategoryEntity getCategoryByCategoryId() {
-        return categoryByCategoryId;
+    public Category getCategory() {
+        return category;
     }
 
     @ManyToOne
     @JoinColumn(name = "book_status_id", referencedColumnName = "id")
-    public BookStatusEntity getBookStatusByBookStatusId() {
-        return bookStatusByBookStatusId;
+    public BookStatus getBookStatus() {
+        return bookStatus;
     }
 
 }

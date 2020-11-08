@@ -11,11 +11,11 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
-@Table(name = "publisher", schema = "library")
-public class PublisherEntity {
+@Table(name = "category", schema = "library")
+public class Category {
     private Integer id;
-    private String publisherName;
-    private String publisherCity;
+    private Integer parentId;
+    private String categoryName;
 
     @Id
     @Column(name = "id")
@@ -25,15 +25,15 @@ public class PublisherEntity {
     }
 
     @Basic
-    @Column(name = "publisher_name")
-    public String getPublisherName() {
-        return publisherName;
+    @Column(name = "parent_id")
+    public Integer getParentId() {
+        return parentId;
     }
 
     @Basic
-    @Column(name = "publisher_city")
-    public String getPublisherCity() {
-        return publisherCity;
+    @Column(name = "category_name")
+    public String getCategoryName() {
+        return categoryName;
     }
 
 }

@@ -6,10 +6,10 @@ import java.util.Collection;
 @Entity
 
 @Table(name = "role", schema = "library", catalog = "")
-public class RoleEntity {
+public class Role {
     private Integer id;
     private String roleName;
-    private Collection<UserRoleEntity> userRolesById;
+    private Collection<UserRole> userRolesById;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -37,7 +37,7 @@ public class RoleEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RoleEntity that = (RoleEntity) o;
+        Role that = (Role) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (roleName != null ? !roleName.equals(that.roleName) : that.roleName != null) return false;
@@ -53,11 +53,11 @@ public class RoleEntity {
     }
 
     @OneToMany(mappedBy = "roleByRoleId")
-    public Collection<UserRoleEntity> getUserRolesById() {
+    public Collection<UserRole> getUserRolesById() {
         return userRolesById;
     }
 
-    public void setUserRolesById(Collection<UserRoleEntity> userRolesById) {
+    public void setUserRolesById(Collection<UserRole> userRolesById) {
         this.userRolesById = userRolesById;
     }
 }

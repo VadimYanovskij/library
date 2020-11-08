@@ -6,7 +6,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "user", schema = "library", catalog = "")
-public class UserEntity {
+public class User {
     private Integer id;
     private String username;
     private String email;
@@ -14,8 +14,8 @@ public class UserEntity {
     private String firstname;
     private String lastname;
     private Date birthday;
-    private Collection<BorrowEntity> borrowsById;
-    private Collection<UserRoleEntity> userRolesById;
+    private Collection<Borrow> borrowsById;
+    private Collection<UserRole> userRolesById;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -93,7 +93,7 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserEntity that = (UserEntity) o;
+        User that = (User) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
@@ -119,20 +119,20 @@ public class UserEntity {
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<BorrowEntity> getBorrowsById() {
+    public Collection<Borrow> getBorrowsById() {
         return borrowsById;
     }
 
-    public void setBorrowsById(Collection<BorrowEntity> borrowsById) {
+    public void setBorrowsById(Collection<Borrow> borrowsById) {
         this.borrowsById = borrowsById;
     }
 
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<UserRoleEntity> getUserRolesById() {
+    public Collection<UserRole> getUserRolesById() {
         return userRolesById;
     }
 
-    public void setUserRolesById(Collection<UserRoleEntity> userRolesById) {
+    public void setUserRolesById(Collection<UserRole> userRolesById) {
         this.userRolesById = userRolesById;
     }
 }
