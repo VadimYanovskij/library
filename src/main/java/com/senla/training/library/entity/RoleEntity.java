@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+
 @Table(name = "role", schema = "library", catalog = "")
 public class RoleEntity {
     private Integer id;
@@ -12,6 +13,7 @@ public class RoleEntity {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
