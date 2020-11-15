@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "book", schema = "library")
 public class Book {
     private Integer id;
-    private Author author;
+    private Set<Author> authors;
     private Publisher publisher;
     private Integer publicationYear;
     private Category category;
@@ -26,10 +27,12 @@ public class Book {
         return id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
-    public Author getAuthor() {
-        return author;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "author_book",
+            joinColumns = {@JoinColumn(name = "book_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "author_id", referencedColumnName = "id")})
+    public Set<Author> getAuthors() {
+        return authors;
     }
 
     @ManyToOne
