@@ -1,5 +1,6 @@
 package com.senla.training.library.entity;
 
+import com.senla.training.library.enums.BookStatus;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -53,10 +54,9 @@ public class Book {
         return category;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "book_status_id", referencedColumnName = "id")
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "book_status_id")
     public BookStatus getBookStatus() {
         return bookStatus;
     }
-
 }
