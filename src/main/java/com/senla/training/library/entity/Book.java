@@ -15,6 +15,7 @@ import java.util.Set;
 @Table(name = "book", schema = "library")
 public class Book {
     private Integer id;
+    private String name;
     private Set<Author> authors;
     private Publisher publisher;
     private Integer publicationYear;
@@ -26,6 +27,12 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
+    }
+
+    @Basic
+    @Column(name = "book_name")
+    public String getName() {
+        return name;
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
