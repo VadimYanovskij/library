@@ -17,7 +17,7 @@ public class Borrow {
     private User user;
     private Book book;
     private LocalDate borrowDate;
-    private Integer period;
+    private LocalDate repaymentDate;
     private LocalDate returnDate;
 
     @Id
@@ -46,9 +46,9 @@ public class Borrow {
     }
 
     @Basic
-    @Column(name = "period")
-    public Integer getPeriod() {
-        return period;
+    @Column(name = "repayment_date")
+    public LocalDate getRepaymentDate() {
+        return repaymentDate;
     }
 
     @Basic

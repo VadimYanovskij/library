@@ -1,6 +1,7 @@
 package com.senla.training.library.service.impl;
 
 import com.senla.training.library.entity.Book;
+import com.senla.training.library.enums.BookStatus;
 import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.service.BookService;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        bookRepository.deleteById(id);
+    public void softDeleteById(Integer id) {
+        Book book = findById(id);
+        book.setBookStatus(BookStatus.DELETED);
+        update(book);
     }
 }

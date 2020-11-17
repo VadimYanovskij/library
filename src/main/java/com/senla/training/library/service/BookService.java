@@ -9,5 +9,5 @@ public interface BookService {
     Book findById(Integer id);
     Book add(Book book);
     Book update(Book book);
-    void deleteById(Integer id);
+    void softDeleteById(Integer id);
 }

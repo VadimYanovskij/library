@@ -15,7 +15,7 @@ import java.util.Set;
 public class Role {
     private Integer id;
     private String roleName;
-    private Set<User> users;
+//    private Set<User> users;
 
     @Id
     @Column(name = "id")
@@ -30,8 +30,8 @@ public class Role {
         return roleName;
     }
 
-    @ManyToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    public Set<User> getUsers() {
-        return users;
-    }
+//    @ManyToMany(mappedBy = "role", fetch = FetchType.LAZY)
+//    public Set<User> getUsers() {
+//        return users;
+//    }
 }

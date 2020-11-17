@@ -40,8 +40,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Integer id) {
-        bookService.deleteById(id);
+    public ResponseEntity<String> softDeleteById(@PathVariable("id") Integer id) {
+        bookService.softDeleteById(id);
         return new ResponseEntity<>("The Book was deleted successfully", HttpStatus.OK);
     }
 
