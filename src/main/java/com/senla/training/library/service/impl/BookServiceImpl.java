@@ -44,4 +44,5 @@ public class BookServiceImpl implements BookService {
         book.setBookStatus(BookStatus.DELETED);
         update(book);
     }
+
 }

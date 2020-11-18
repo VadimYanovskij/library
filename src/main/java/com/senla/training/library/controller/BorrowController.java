@@ -43,4 +43,9 @@ public class BorrowController {
     public ResponseEntity<List<Borrow>> findAllByBookId(@PathVariable("bookId") Integer bookId) {
         return new ResponseEntity<>(borrowService.findAllByBookId(bookId), HttpStatus.OK);
     }
+
+    @GetMapping("/expired")
+    public ResponseEntity<List<Borrow>> findExpiredBorrows() {
+        return new ResponseEntity<>(borrowService.findExpiredBorrows(), HttpStatus.OK);
+    }
 }

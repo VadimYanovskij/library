@@ -1,5 +1,6 @@
 package com.senla.training.library.entity;
 
+import com.senla.training.library.enums.RoleName;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +15,7 @@ import java.util.Set;
 @Table(name = "role", schema = "library")
 public class Role {
     private Integer id;
-    private String roleName;
-//    private Set<User> users;
+    private RoleName roleName;
 
     @Id
     @Column(name = "id")
@@ -25,13 +25,10 @@ public class Role {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
-    public String getRoleName() {
+    public RoleName getRoleName() {
         return roleName;
     }
 
-//    @ManyToMany(mappedBy = "role", fetch = FetchType.LAZY)
-//    public Set<User> getUsers() {
-//        return users;
-//    }
 }

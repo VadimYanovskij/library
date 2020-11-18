@@ -3,6 +3,7 @@ package com.senla.training.library.repository;
 import com.senla.training.library.entity.Book;
 import com.senla.training.library.entity.Borrow;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,4 +12,8 @@ import java.util.List;
 public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
 
     List<Borrow> findAllByBook(Book book);
+
+    @Query("SELECT b FROM Borrow b WHERE b.returnDate > b.repaymentDate")
+    List<Borrow> findAllExpiredBorrows();
+
 }

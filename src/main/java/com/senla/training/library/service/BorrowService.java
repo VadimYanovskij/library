@@ -11,4 +11,5 @@ public interface BorrowService {
     Borrow add(Borrow borrow);
     Borrow update(Borrow borrow);
     List<Borrow> findAllByBookId(Integer bookId);
+    List<Borrow> findExpiredBorrows();
 }
