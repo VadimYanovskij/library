@@ -1,9 +1,13 @@
 package com.senla.training.library.controller;
 
+import com.senla.training.library.dto.BookDto;
+import com.senla.training.library.dto.DtoConverter;
 import com.senla.training.library.entity.Book;
 import com.senla.training.library.service.BookService;
+import com.senla.training.library.transfer.New;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +17,11 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+    private final DtoConverter dtoConverter;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, DtoConverter dtoConverter) {
         this.bookService = bookService;
+        this.dtoConverter = dtoConverter;
     }
 
     @GetMapping
@@ -29,8 +35,8 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> add(@RequestBody Book book) {
-        return new ResponseEntity<>(bookService.add(book), HttpStatus.OK);
+    public ResponseEntity<Book> add(@Validated(New.class) @RequestBody BookDto bookDto) {
+        return new ResponseEntity<>(bookService.add(dtoConverter.bookDtoToEntity(bookDto)), HttpStatus.OK);
     }
 
     @PutMapping

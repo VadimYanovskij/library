@@ -1,5 +1,6 @@
 package com.senla.training.library.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.Collection;
 @Entity
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "publisher", schema = "library")
 public class Publisher {
