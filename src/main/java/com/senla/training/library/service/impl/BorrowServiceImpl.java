@@ -2,7 +2,6 @@ package com.senla.training.library.service.impl;
 
 import com.senla.training.library.entity.Book;
 import com.senla.training.library.entity.Borrow;
-import com.senla.training.library.exception.WrongEntityParameter;
 import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.repository.BorrowRepository;
 import com.senla.training.library.service.BorrowService;
