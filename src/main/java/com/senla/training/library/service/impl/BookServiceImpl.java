@@ -2,6 +2,7 @@ package com.senla.training.library.service.impl;
 
 import com.senla.training.library.entity.Book;
 import com.senla.training.library.enums.BookStatus;
+import com.senla.training.library.exception.EntityAlreadyDeleted;
 import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.service.BookService;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,24 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book update(Book book) {
+        if (!bookRepository.findById(book.getId()).isPresent()) {
+            System.out.println("Not exist " + book.getId());
+            throw new EntityNotFoundException("Book not found");
+        }
         return bookRepository.save(book);
     }
 
     @Override
     public void softDeleteById(Integer id) {
         Book book = findById(id);
+        if (book == null) {
+            throw new EntityNotFoundException("Book not found");
+        }
+        if (book.getBookStatus() == BookStatus.DELETED) {
+            throw new EntityAlreadyDeleted("Book already deleted!");
+        }
         book.setBookStatus(BookStatus.DELETED);
-        update(book);
+        bookRepository.save(book);
     }
 
 }

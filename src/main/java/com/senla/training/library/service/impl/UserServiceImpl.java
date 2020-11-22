@@ -36,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
+        if (!userRepository.findById(user.getId()).isPresent()) {
+            System.out.println("Not exist " + user.getId());
+            throw new EntityNotFoundException("User not found");
+        }
         return userRepository.save(user);
     }
 

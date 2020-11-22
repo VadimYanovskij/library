@@ -38,6 +38,10 @@ public class BorrowServiceImpl implements BorrowService {
 
     @Override
     public Borrow update(Borrow borrow) {
+        if (!borrowRepository.findById(borrow.getId()).isPresent()) {
+            System.out.println("Not exist " + borrow.getId());
+            throw new EntityNotFoundException("Borrow not found");
+        }
         return borrowRepository.save(borrow);
     }
 

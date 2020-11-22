@@ -34,6 +34,10 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public Publisher update(Publisher publisher) {
+        if (!publisherRepository.findById(publisher.getId()).isPresent()) {
+            System.out.println("Not exist " + publisher.getId());
+            throw new EntityNotFoundException("Publisher not found");
+        }
         return publisherRepository.save(publisher);
     }
 

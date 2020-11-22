@@ -37,9 +37,10 @@ public class PublisherController {
     }
 
     @PostMapping
-    public ResponseEntity<PublisherDto> add(@Validated(New.class) @RequestBody PublisherDto publisherDto, BindingResult errors) {
-        if (errors.hasErrors()) {
-            System.out.println(errors);
+    public ResponseEntity<PublisherDto> add(@Validated(New.class) @RequestBody PublisherDto publisherDto,
+                                            BindingResult result) {
+        if (result.hasErrors()) {
+            System.out.println(result);
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(dtoConverter.publisherToDto(publisherService.add(
@@ -47,9 +48,10 @@ public class PublisherController {
     }
 
     @PutMapping
-    public ResponseEntity<PublisherDto> update(@Validated(Exist.class) @RequestBody PublisherDto publisherDto, Errors errors) {
-        if (errors.hasErrors()) {
-            System.out.println(errors);
+    public ResponseEntity<PublisherDto> update(@Validated(Exist.class) @RequestBody PublisherDto publisherDto,
+                                               BindingResult result) {
+        if (result.hasErrors()) {
+            System.out.println(result);
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(dtoConverter.publisherToDto(publisherService.add(
@@ -59,6 +61,6 @@ public class PublisherController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") Integer id) {
         publisherService.deleteById(id);
-        return new ResponseEntity<>("The Publisher was deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>("The Publisher was deleted successfully.", HttpStatus.OK);
     }
 }
