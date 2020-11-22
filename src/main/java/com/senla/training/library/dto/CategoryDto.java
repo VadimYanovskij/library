@@ -14,15 +14,16 @@ import javax.validation.constraints.Null;
 @Setter
 @ToString
 @AllArgsConstructor
-public class PublisherDto {
+public class CategoryDto {
 
     @Null(groups = {New.class})
     @NotNull(groups = {Exist.class})
     private Integer id;
 
     @NotNull(groups = {New.class, Exist.class})
-    private String publisherName;
+    private Integer parentId;
 
     @NotNull(groups = {New.class, Exist.class})
-    private String publisherCity;
+    private String categoryName;
+
 }

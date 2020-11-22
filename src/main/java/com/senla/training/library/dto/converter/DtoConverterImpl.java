@@ -1,16 +1,15 @@
-package com.senla.training.library.dto;
+package com.senla.training.library.dto.converter;
 
-import com.senla.training.library.entity.Author;
-import com.senla.training.library.entity.Book;
-import com.senla.training.library.entity.Borrow;
-import com.senla.training.library.entity.Publisher;
+import com.senla.training.library.dto.*;
+import com.senla.training.library.dto.converter.DtoConverter;
+import com.senla.training.library.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class DtoConverterImpl implements DtoConverter{
+public class DtoConverterImpl implements DtoConverter {
     @Override
     public PublisherDto publisherToDto(Publisher publisher) {
         return new PublisherDto(
@@ -150,6 +149,80 @@ public class DtoConverterImpl implements DtoConverter{
     public List<Borrow> borrowDtosToEntities(List<BorrowDto> borrowDtos) {
         return borrowDtos.stream()
                 .map(borrowDto -> borrowDtoToEntity(borrowDto))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto userToDto(User user) {
+        return new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getFirstname(),
+                user.getLastname(),
+                user.getBirthday(),
+                user.getRoles()
+        );
+    }
+
+    @Override
+    public User userDtoToEntity(UserDto userDto) {
+        return new User(
+                userDto.getId(),
+                userDto.getUsername(),
+                userDto.getEmail(),
+                userDto.getPassword(),
+                userDto.getFirstname(),
+                userDto.getLastname(),
+                userDto.getBirthday(),
+                userDto.getRoles()
+        );
+    }
+
+    @Override
+    public List<UserDto> usersToDtos(List<User> users) {
+        return users.stream()
+                .map(user -> userToDto(user))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> userDtosToEntities(List<UserDto> userDtos) {
+        return userDtos.stream()
+                .map(userDto -> userDtoToEntity(userDto))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryDto categoryToDto(Category category) {
+        return new CategoryDto(
+                category.getId(),
+                category.getParentId(),
+                category.getCategoryName()
+        );
+    }
+
+    @Override
+    public Category categoryDtoToEntity(CategoryDto categoryDto) {
+        return new Category(
+                categoryDto.getId(),
+                categoryDto.getParentId(),
+                categoryDto.getCategoryName()
+        );
+    }
+
+    @Override
+    public List<CategoryDto> categoriesToDtos(List<Category> categories) {
+        return categories.stream()
+                .map(category -> categoryToDto(category))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Category> categoryDtosToEntities(List<CategoryDto> categoryDtos) {
+        return categoryDtos.stream()
+                .map(categoryDto -> categoryDtoToEntity(categoryDto))
                 .collect(Collectors.toList());
     }
 }

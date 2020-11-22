@@ -1,10 +1,11 @@
 package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.BorrowDto;
-import com.senla.training.library.dto.DtoConverter;
+import com.senla.training.library.dto.converter.DtoConverter;
 import com.senla.training.library.service.BorrowService;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("v1/borrows")
 public class BorrowController {
@@ -27,32 +29,39 @@ public class BorrowController {
 
     @GetMapping
     public ResponseEntity<List<BorrowDto>> findAll() {
-        return new ResponseEntity<>(
+        log.info("Listing borrows");
+        ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
                 dtoConverter.borrowsToDtos(
                         borrowService.findAll()
                 ),
                 HttpStatus.OK
         );
+        log.info("Borrows listed successfully");
+        return result;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BorrowDto> findById(@PathVariable("id") Integer id) {
-        return new ResponseEntity<>(
+        log.info("Finding borrow with id = {}", id);
+        ResponseEntity<BorrowDto> result = new ResponseEntity<>(
                 dtoConverter.borrowToDto(
                         borrowService.findById(id)
                 ),
                 HttpStatus.OK
         );
+        log.info("Borrow with id = {} found", id);
+        return result;
     }
 
     @PostMapping
     public ResponseEntity<BorrowDto> add(@Validated(New.class) @RequestBody BorrowDto borrowDto,
-                                         BindingResult result) {
-        if (result.hasErrors()) {
-            System.out.println(result);
+                                         BindingResult bindingResult) {
+        log.info("Creating borrow: {}", borrowDto);
+        if (bindingResult.hasErrors()) {
+            log.error("Error! Wrong request body.");
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(
+        ResponseEntity<BorrowDto> result = new ResponseEntity<>(
                 dtoConverter.borrowToDto(
                         borrowService.add(
                                 dtoConverter.borrowDtoToEntity(borrowDto)
@@ -60,16 +69,19 @@ public class BorrowController {
                 ),
                 HttpStatus.OK
         );
+        log.info("Borrow created successfully with info: \" {}", borrowDto);
+        return result;
     }
 
     @PutMapping
     public ResponseEntity<BorrowDto> update(@Validated(Exist.class) @RequestBody BorrowDto borrowDto,
-                                            BindingResult result) {
-        if (result.hasErrors()) {
-            System.out.println(result);
+                                            BindingResult bindingResult) {
+        log.info("Updating borrow: {}", borrowDto);
+        if (bindingResult.hasErrors()) {
+            log.error("Error! Wrong request body.");
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(
+        ResponseEntity<BorrowDto> result = new ResponseEntity<>(
                 dtoConverter.borrowToDto(
                         borrowService.update(
                                 dtoConverter.borrowDtoToEntity(borrowDto)
@@ -77,24 +89,32 @@ public class BorrowController {
                 ),
                 HttpStatus.OK
         );
+        log.info("Borrow updated successfully with info: \" {}", borrowDto);
+        return result;
     }
 
     @GetMapping("/history/{bookId}")
     public ResponseEntity<List<BorrowDto>> findAllByBookId(@PathVariable("bookId") Integer bookId) {
-        return new ResponseEntity<>(
+        log.info("Listing borrows history of book with id = {}", bookId);
+        ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
                 dtoConverter.borrowsToDtos(
                         borrowService.findAllByBookId(bookId)
                 ),
                 HttpStatus.OK
         );
+        log.info("Borrows history of book with id = {} listed successfully", bookId);
+        return result;
     }
 
     @GetMapping("/expired")
     public ResponseEntity<List<BorrowDto>> findExpiredBorrows() {
-        return new ResponseEntity<>(
+        log.info("Listing expired borrows");
+        ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
                 dtoConverter.borrowsToDtos(borrowService.findExpiredBorrows()
                 ),
                 HttpStatus.OK
         );
+        log.info("Borrows listed successfully");
+        return result;
     }
 }

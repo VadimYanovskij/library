@@ -1,9 +1,7 @@
-package com.senla.training.library.dto;
+package com.senla.training.library.dto.converter;
 
-import com.senla.training.library.entity.Author;
-import com.senla.training.library.entity.Book;
-import com.senla.training.library.entity.Borrow;
-import com.senla.training.library.entity.Publisher;
+import com.senla.training.library.dto.*;
+import com.senla.training.library.entity.*;
 
 import java.util.List;
 
@@ -43,4 +41,22 @@ public interface DtoConverter {
     List<BorrowDto> borrowsToDtos(List<Borrow> borrows);
 
     List<Borrow> borrowDtosToEntities(List<BorrowDto> borrowDtos);
+
+
+    UserDto userToDto(User user);
+
+    User userDtoToEntity(UserDto userDto);
+
+    List<UserDto> usersToDtos(List<User> users);
+
+    List<User> userDtosToEntities(List<UserDto> userDtos);
+
+
+    CategoryDto categoryToDto(Category category);
+
+    Category categoryDtoToEntity(CategoryDto categoryDto);
+
+    List<CategoryDto> categoriesToDtos(List<Category> categories);
+
+    List<Category> categoryDtosToEntities(List<CategoryDto> categoryDtos);
 }

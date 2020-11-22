@@ -4,12 +4,14 @@ import com.senla.training.library.enums.RoleName;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Setter
+@ToString
 @NoArgsConstructor
 @EqualsAndHashCode
 @Table(name = "role", schema = "library")

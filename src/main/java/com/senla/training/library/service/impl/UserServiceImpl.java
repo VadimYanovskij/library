@@ -4,12 +4,15 @@ import com.senla.training.library.entity.Role;
 import com.senla.training.library.entity.User;
 import com.senla.training.library.repository.UserRepository;
 import com.senla.training.library.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -21,37 +24,65 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAll();
+        log.info("Listing users from database");
+        List<User> result = userRepository.findAll();
+        log.info("Users listed successfully from database");
+        return result;
     }
 
     @Override
     public User findById(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        log.info("Finding user with id = {} in database", id);
+        Optional<User> result = userRepository.findById(id);
+        if (result.isPresent()) {
+            log.info("User with id = {} found in database", id);
+            return result.get();
+        } else {
+            log.error("User with id = {} not found in database", id);
+            throw new EntityNotFoundException("User not found in database");
+        }
     }
 
     @Override
     public User add(User user) {
-        return userRepository.save(user);
+        log.info("Creating in database user: {}", user);
+        User result = userRepository.save(user);
+        log.info("User created in database successfully with info: \" {}", user);
+        return result;
     }
 
     @Override
     public User update(User user) {
-        if (!userRepository.findById(user.getId()).isPresent()) {
-            System.out.println("Not exist " + user.getId());
+        log.info("Updating in database user: {}", user);
+        if (userRepository.findById(user.getId()).isPresent()) {
+            User result = userRepository.save(user);
+            log.info("User updated successfully in database with info: \" {}", user);
+            return result;
+        } else {
+            log.error("User with id = {} not found ", user.getId());
             throw new EntityNotFoundException("User not found");
         }
-        return userRepository.save(user);
     }
 
     @Override
     public User findByUsername(String userName) {
-        return userRepository.findByUsername(userName);
+        log.info("Finding user with userName = {} in database", userName);
+        User result = userRepository.findByUsername(userName);
+        if (result == null) {
+            log.error("User with userName = {} not found in database", userName);
+            throw new EntityNotFoundException("User not found");
+        }
+        log.info("User with userName = {} found in database successfully", userName);
+        return result;
     }
 
     @Override
     public User setRoles(String userName, Set<Role> roles) {
+        log.info("Setting roles: {} for user: {} in database", roles, userName);
         User user = userRepository.findByUsername(userName);
         user.setRoles(roles);
-        return userRepository.save(user);
+        User result = userRepository.save(user);
+        log.info("Roles: {} for user: {} set in database successfully", roles, userName);
+        return result;
     }
 }

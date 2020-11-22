@@ -1,8 +1,6 @@
 package com.senla.training.library.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +8,9 @@ import java.util.Set;
 
 @Entity
 @Setter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "user", schema = "library")
 public class User {
