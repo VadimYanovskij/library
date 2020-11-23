@@ -25,9 +25,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findAll() {
-        log.info("Listing books from database");
+        log.info("Listing all books from database");
         List<Book> result = bookRepository.findAll();
-        log.info("Books listed successfully from database");
+        log.info("All books listed successfully from database");
+        return result;
+    }
+
+    @Override
+    public List<Book> findAllNotDeletedBooks() {
+        log.info("Listing books without deleted from database");
+        List<Book> result = bookRepository.findAllNotDeletedBooks();
+        log.info("Books without deleted listed successfully from database");
         return result;
     }
 
@@ -37,9 +45,26 @@ public class BookServiceImpl implements BookService {
         Optional<Book> result = bookRepository.findById(id);
         if (result.isPresent()) {
             log.info("Book with id = {} found in database", id);
+            if (result.get().getBookStatus() == BookStatus.DELETED) {
+                log.error("Book with id = {} has DELETED status", id);
+                throw new EntityAlreadyDeleted("This book has DELETED status");
+            }
             return result.get();
         } else {
             log.error("Book with id = {} not found in database", id);
+            throw new EntityNotFoundException("Book not found in database");
+        }
+    }
+
+    @Override
+    public Book findByIdWithDeleted(Integer id) {
+        log.info("Finding book (WithDeleted) with id = {} in database", id);
+        Optional<Book> result = bookRepository.findById(id);
+        if (result.isPresent()) {
+            log.info("Book (WithDeleted) with id = {} found in database", id);
+            return result.get();
+        } else {
+            log.error("Book (WithDeleted) with id = {} not found in database", id);
             throw new EntityNotFoundException("Book not found in database");
         }
     }

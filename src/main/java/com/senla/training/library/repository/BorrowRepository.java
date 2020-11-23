@@ -13,7 +13,7 @@ public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
 
     List<Borrow> findAllByBook(Book book);
 
-    @Query("SELECT b FROM Borrow b WHERE b.returnDate > b.repaymentDate")
+    @Query("SELECT b FROM Borrow b WHERE b.returnDate > b.repaymentDate AND NOT b.book.bookStatus = 3")
     List<Borrow> findAllExpiredBorrows();
 
 }

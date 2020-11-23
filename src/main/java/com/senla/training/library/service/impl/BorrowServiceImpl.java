@@ -83,9 +83,9 @@ public class BorrowServiceImpl implements BorrowService {
 
     @Override
     public List<Borrow> findExpiredBorrows() {
-        log.info("Listing expired borrows");
+        log.info("Listing expired borrows from database");
         List<Borrow> result = borrowRepository.findAllExpiredBorrows();
-        log.info("Borrows listed successfully");
+        log.info("Borrows listed successfully from database");
         return result;
     }
 }

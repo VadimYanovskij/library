@@ -27,12 +27,25 @@ public class BookController {
         this.dtoConverter = dtoConverter;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<BookDto>> findAll() {
-        log.info("Listing books");
+        log.info("Listing all books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
                 dtoConverter.booksToDtos(
                         bookService.findAll()
+                ),
+                HttpStatus.OK
+        );
+        log.info("All books listed successfully");
+        return result;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BookDto>> findAllNotDeletedBooks() {
+        log.info("Listing books");
+        ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
+                dtoConverter.booksToDtos(
+                        bookService.findAllNotDeletedBooks()
                 ),
                 HttpStatus.OK
         );
@@ -50,6 +63,19 @@ public class BookController {
                 HttpStatus.OK
         );
         log.info("Book with id = {} found", id);
+        return result;
+    }
+
+    @GetMapping("/all/{id}")
+    public ResponseEntity<BookDto> findByIdWithDeleted(@PathVariable("id") Integer id) {
+        log.info("Finding book (WithDeleted) with id = {}", id);
+        ResponseEntity<BookDto> result = new ResponseEntity<>(
+                dtoConverter.bookToDto(
+                        bookService.findByIdWithDeleted(id)
+                ),
+                HttpStatus.OK
+        );
+        log.info("Book (WithDeleted) with id = {} found", id);
         return result;
     }
 

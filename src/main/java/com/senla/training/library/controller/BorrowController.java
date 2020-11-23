@@ -1,8 +1,11 @@
 package com.senla.training.library.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.senla.training.library.dto.BorrowDto;
+import com.senla.training.library.dto.BorrowHistoryDto;
 import com.senla.training.library.dto.converter.DtoConverter;
 import com.senla.training.library.service.BorrowService;
+import com.senla.training.library.transfer.Details;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ public class BorrowController {
         this.dtoConverter = dtoConverter;
     }
 
+    @JsonView({Details.class})
     @GetMapping
     public ResponseEntity<List<BorrowDto>> findAll() {
         log.info("Listing borrows");
@@ -94,10 +98,10 @@ public class BorrowController {
     }
 
     @GetMapping("/history/{bookId}")
-    public ResponseEntity<List<BorrowDto>> findAllByBookId(@PathVariable("bookId") Integer bookId) {
+    public ResponseEntity<List<BorrowHistoryDto>> borrowHistoryByBookId(@PathVariable("bookId") Integer bookId) {
         log.info("Listing borrows history of book with id = {}", bookId);
-        ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
-                dtoConverter.borrowsToDtos(
+        ResponseEntity<List<BorrowHistoryDto>> result = new ResponseEntity<>(
+                dtoConverter.borrowsToBorrowHistoryDtos(
                         borrowService.findAllByBookId(bookId)
                 ),
                 HttpStatus.OK

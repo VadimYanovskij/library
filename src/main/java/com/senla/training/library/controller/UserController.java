@@ -1,9 +1,12 @@
 package com.senla.training.library.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.senla.training.library.dto.converter.DtoConverter;
 import com.senla.training.library.dto.UserDto;
 import com.senla.training.library.entity.Role;
 import com.senla.training.library.service.UserService;
+import com.senla.training.library.transfer.AdminDetails;
+import com.senla.training.library.transfer.Details;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,7 @@ public class UserController {
     }
 
     @GetMapping
+    @JsonView(Details.class)
     public ResponseEntity<List<UserDto>> findAll() {
         log.info("Listing users");
         ResponseEntity<List<UserDto>> result = new ResponseEntity<>(
@@ -43,6 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @JsonView({AdminDetails.class})
     public ResponseEntity<UserDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding user with id = {}", id);
         ResponseEntity<UserDto> result = new ResponseEntity<>(
@@ -56,6 +61,7 @@ public class UserController {
     }
 
     @PostMapping
+    @JsonView(Details.class)
     public ResponseEntity<UserDto> add(@Validated(New.class) @RequestBody UserDto userDto,
                                        BindingResult bindingResult) {
         log.info("Creating user: {}", userDto);

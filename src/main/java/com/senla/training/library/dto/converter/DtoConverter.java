@@ -24,7 +24,7 @@ public interface DtoConverter {
 
     List<Author> authorDtosToEntities(List<AuthorDto> authorDtos);
 
-    
+
     BookDto bookToDto(Book book);
 
     Book bookDtoToEntity(BookDto bookDto);
@@ -59,4 +59,9 @@ public interface DtoConverter {
     List<CategoryDto> categoriesToDtos(List<Category> categories);
 
     List<Category> categoryDtosToEntities(List<CategoryDto> categoryDtos);
+
+
+    BorrowHistoryDto borrowToBorrowHistoryDto(Borrow borrow);
+
+    List<BorrowHistoryDto> borrowsToBorrowHistoryDtos(List<Borrow> borrows);
 }
