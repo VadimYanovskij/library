@@ -4,7 +4,7 @@ package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.AuthorDto;
 import com.senla.training.library.dto.converter.DtoConverter;
-import library.service.AuthorService;
+import com.senla.training.library.service.AuthorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

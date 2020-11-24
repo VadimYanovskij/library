@@ -8,12 +8,20 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>war</packaging>
+
 
     <artifactId>library-controller</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.senla.training</groupId>
             <artifactId>library-model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.senla.training</groupId>
+            <artifactId>library-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

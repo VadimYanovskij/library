@@ -9,7 +9,7 @@ import com.senla.training.library.transfer.AdminDetails;
 import com.senla.training.library.transfer.Details;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
-import library.service.UserService;
+import com.senla.training.library.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

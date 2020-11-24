@@ -8,7 +8,7 @@ import com.senla.training.library.dto.converter.DtoConverter;
 import com.senla.training.library.transfer.Details;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
-import library.service.BorrowService;
+import com.senla.training.library.service.BorrowService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

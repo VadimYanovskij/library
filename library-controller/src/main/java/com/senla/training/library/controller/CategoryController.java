@@ -4,7 +4,7 @@ import com.senla.training.library.dto.CategoryDto;
 import com.senla.training.library.dto.converter.DtoConverter;
 
 import com.senla.training.library.transfer.New;
-import library.service.CategoryService;
+import com.senla.training.library.service.CategoryService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

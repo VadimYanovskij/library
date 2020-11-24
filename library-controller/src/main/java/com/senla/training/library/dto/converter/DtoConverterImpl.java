@@ -2,8 +2,8 @@ package com.senla.training.library.dto.converter;
 
 import com.senla.training.library.dto.*;
 import com.senla.training.library.entity.*;
-import library.service.BookService;
-import library.service.UserService;
+import com.senla.training.library.service.BookService;
+import com.senla.training.library.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

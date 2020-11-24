@@ -5,7 +5,7 @@ import com.senla.training.library.dto.PublisherDto;
 import com.senla.training.library.dto.converter.DtoConverter;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
-import library.service.PublisherService;
+import com.senla.training.library.service.PublisherService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
