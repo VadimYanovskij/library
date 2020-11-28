@@ -6,6 +6,7 @@ import com.senla.training.library.enums.BookStatus;
 import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.repository.BorrowRepository;
 import com.senla.training.library.service.BorrowService;
+import com.senla.training.library.specifications.BorrowSpecs;
 import com.senla.training.library.specifications.impl.BorrowSpecsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,12 +22,12 @@ public class BorrowServiceImpl implements BorrowService {
 
     private final BorrowRepository borrowRepository;
     private final BookRepository bookRepository;
-    private final BorrowSpecsImpl borrowSpecsImpl;
+    private final BorrowSpecs borrowSpecs;
 
-    public BorrowServiceImpl(BorrowRepository borrowRepository, BookRepository bookRepository, BorrowSpecsImpl borrowSpecsImpl) {
+    public BorrowServiceImpl(BorrowRepository borrowRepository, BookRepository bookRepository, BorrowSpecsImpl borrowSpecsImpl, BorrowSpecs borrowSpecs) {
         this.borrowRepository = borrowRepository;
         this.bookRepository = bookRepository;
-        this.borrowSpecsImpl = borrowSpecsImpl;
+        this.borrowSpecs = borrowSpecs;
     }
 
     @Override
@@ -90,8 +91,8 @@ public class BorrowServiceImpl implements BorrowService {
         log.info("Listing expired borrows from database");
         List<Borrow> result = borrowRepository.findAll(
                 Specification
-                        .not(borrowSpecsImpl.getBorrowsByBookStatus(BookStatus.DELETED))
-                        .and(borrowSpecsImpl.getExpiredBorrows())
+                        .not(borrowSpecs.getBorrowsByBookStatus(BookStatus.DELETED))
+                        .and(borrowSpecs.getExpiredBorrows())
         );
         log.info("Borrows listed successfully from database");
         return result;
