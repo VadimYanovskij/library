@@ -2,10 +2,13 @@ package com.senla.training.library.service.impl;
 
 import com.senla.training.library.entity.Book;
 import com.senla.training.library.entity.Borrow;
+import com.senla.training.library.enums.BookStatus;
 import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.repository.BorrowRepository;
 import com.senla.training.library.service.BorrowService;
+import com.senla.training.library.specifications.impl.BorrowSpecsImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,10 +21,12 @@ public class BorrowServiceImpl implements BorrowService {
 
     private final BorrowRepository borrowRepository;
     private final BookRepository bookRepository;
+    private final BorrowSpecsImpl borrowSpecsImpl;
 
-    public BorrowServiceImpl(BorrowRepository borrowRepository, BookRepository bookRepository) {
+    public BorrowServiceImpl(BorrowRepository borrowRepository, BookRepository bookRepository, BorrowSpecsImpl borrowSpecsImpl) {
         this.borrowRepository = borrowRepository;
         this.bookRepository = bookRepository;
+        this.borrowSpecsImpl = borrowSpecsImpl;
     }
 
     @Override
@@ -83,7 +88,11 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public List<Borrow> findExpiredBorrows() {
         log.info("Listing expired borrows from database");
-        List<Borrow> result = borrowRepository.findAllExpiredBorrows();
+        List<Borrow> result = borrowRepository.findAll(
+                Specification
+                        .not(borrowSpecsImpl.getBorrowsByBookStatus(BookStatus.DELETED))
+                        .and(borrowSpecsImpl.getExpiredBorrows())
+        );
         log.info("Borrows listed successfully from database");
         return result;
     }

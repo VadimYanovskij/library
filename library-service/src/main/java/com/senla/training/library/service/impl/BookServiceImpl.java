@@ -5,7 +5,9 @@ import com.senla.training.library.enums.BookStatus;
 import com.senla.training.library.exception.EntityAlreadyDeleted;
 import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.service.BookService;
+import com.senla.training.library.specifications.impl.BookSpecsImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final BookSpecsImpl bookSpecsImpl;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, BookSpecsImpl bookSpecsImpl) {
         this.bookRepository = bookRepository;
+        this.bookSpecsImpl = bookSpecsImpl;
     }
 
     @Override
@@ -33,7 +37,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findAllNotDeletedBooks() {
         log.info("Listing books without deleted from database");
-        List<Book> result = bookRepository.findAllNotDeletedBooks();
+        List<Book> result = bookRepository.findAll(
+                Specification
+                        .not(bookSpecsImpl.getBooksByBookStatus(BookStatus.DELETED))
+        );
         log.info("Books without deleted listed successfully from database");
         return result;
     }
