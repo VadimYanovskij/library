@@ -6,7 +6,6 @@ import com.senla.training.library.exception.EntityAlreadyDeleted;
 import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.service.BookService;
 import com.senla.training.library.specifications.BookSpecs;
-import com.senla.training.library.specifications.impl.BookSpecsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookSpecs bookSpecs;
 
-    public BookServiceImpl(BookRepository bookRepository, BookSpecsImpl bookSpecsImpl, BookSpecs bookSpecs) {
+    public BookServiceImpl(BookRepository bookRepository, BookSpecs bookSpecs) {
         this.bookRepository = bookRepository;
         this.bookSpecs = bookSpecs;
     }

@@ -10,8 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
+    <artifactId>library-start</artifactId>
 
-    <artifactId>library-controller</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.senla.training</groupId>
@@ -21,7 +21,25 @@
         </dependency>
         <dependency>
             <groupId>com.senla.training</groupId>
+            <artifactId>library-repository</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.senla.training</groupId>
             <artifactId>library-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.senla.training</groupId>
+            <artifactId>library-controller</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.senla.training</groupId>
+            <artifactId>library-security</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

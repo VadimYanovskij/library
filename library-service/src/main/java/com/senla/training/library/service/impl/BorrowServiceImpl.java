@@ -7,7 +7,6 @@ import com.senla.training.library.repository.BookRepository;
 import com.senla.training.library.repository.BorrowRepository;
 import com.senla.training.library.service.BorrowService;
 import com.senla.training.library.specifications.BorrowSpecs;
-import com.senla.training.library.specifications.impl.BorrowSpecsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,8 @@ public class BorrowServiceImpl implements BorrowService {
     private final BookRepository bookRepository;
     private final BorrowSpecs borrowSpecs;
 
-    public BorrowServiceImpl(BorrowRepository borrowRepository, BookRepository bookRepository, BorrowSpecsImpl borrowSpecsImpl, BorrowSpecs borrowSpecs) {
+    public BorrowServiceImpl(BorrowRepository borrowRepository, BookRepository bookRepository,
+                             BorrowSpecs borrowSpecs) {
         this.borrowRepository = borrowRepository;
         this.bookRepository = bookRepository;
         this.borrowSpecs = borrowSpecs;

@@ -7,5 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 public interface BorrowSpecs {
 
     Specification<Borrow> getBorrowsByBookStatus(BookStatus bookStatus);
+
     Specification<Borrow> getExpiredBorrows();
 }

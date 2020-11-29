@@ -45,15 +45,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User add(User user) {
-        log.info("Creating in database user: {}", user);
+        log.info("Creating in database user with username = {}", user.getUsername());
         User result = userRepository.save(user);
-        log.info("User created in database successfully with info: \" {}", user);
+        log.info("User created in database successfully");
         return result;
     }
 
     @Override
     public User update(User user) {
-        log.info("Updating in database user: {}", user);
+        log.info("Updating in database user with id = {}", user.getId());
         if (userRepository.findById(user.getId()).isPresent()) {
             User result = userRepository.save(user);
             log.info("User updated successfully in database with info: \" {}", user);
