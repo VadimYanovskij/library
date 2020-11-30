@@ -42,7 +42,7 @@ public class BookController {
     }
 
     @GetMapping
-    @Secured("ROLE_USER")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<BookDto>> findAllNotDeletedBooks() {
         log.info("Listing books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(

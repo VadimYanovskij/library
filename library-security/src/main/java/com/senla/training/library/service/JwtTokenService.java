@@ -45,7 +45,7 @@ public class JwtTokenService {
     public List<String> getRoles(String token) {
         log.info("Getting roles from jwt token");
         List<String> result = getClaimFromToken(token, claims -> (List) claims.get(ROLES));
-        log.info("Roles has got from jwt token");
+        log.info("Roles has got from jwt token {}", result);
         return result;
     }
 
@@ -58,7 +58,7 @@ public class JwtTokenService {
     private Claims getAllClaimsFromToken(String token) {
         log.info("Getting any information from jwt token with secret key");
         Claims result = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        log.info("Any information has got from jwt token");
+        log.info("Any information has got from jwt token, {}", result);
         return result;
     }
 

@@ -28,12 +28,18 @@ public class JwtUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         log.info("Start loading user by username = {}", username);
         User user = userService.findByUsername(username);
+        log.info("User = {}", user);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         UserDetails result = new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getPassword(),
-                AuthorityUtils.createAuthorityList("ROLE_USER"));
+                AuthorityUtils.createAuthorityList(user.getRoles().stream()
+                        .map(role -> role.getRoleName().toString())
+                        .toArray(String[]::new)
+                )
+        );
+        log.info("UserDetails = {}", result);
         log.info("User has loaded successfully");
         return result;
     }
