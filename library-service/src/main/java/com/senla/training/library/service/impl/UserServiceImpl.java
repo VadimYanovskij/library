@@ -77,12 +77,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User setRoles(String userName, Set<Role> roles) {
+    public Set<Role> setRoles(String userName, Set<Role> roles) {
         log.info("Setting roles: {} for user: {} in database", roles, userName);
         User user = userRepository.findByUsername(userName);
         user.setRoles(roles);
         User result = userRepository.save(user);
         log.info("Roles: {} for user: {} set in database successfully", roles, userName);
-        return result;
+        return result.getRoles();
     }
 }

@@ -8,6 +8,7 @@ import com.senla.training.library.service.AuthorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -96,6 +97,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
+    @Secured("ROLE_ADMIN")
     ResponseEntity<String> deleteById(@PathVariable("id") Integer id) {
         log.info("Deleting author by id = {}", id);
         authorService.deleteById(id);

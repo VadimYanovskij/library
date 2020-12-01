@@ -9,6 +9,7 @@ import com.senla.training.library.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +74,7 @@ public class CategoryController {
         log.info("Category created successfully with info: \" {}", categoryDto);
         return result;
     }
+
     @PutMapping
     public ResponseEntity<CategoryDto> update(@Validated(New.class) @RequestBody CategoryDto categoryDto,
                                               BindingResult bindingResult){
@@ -93,6 +95,7 @@ public class CategoryController {
         return result;
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") Integer id){
         log.info("Deleting category by id = {}", id);

@@ -1,6 +1,7 @@
 package com.senla.training.library.service;
 
-import com.senla.training.library.dto.AuthenticationUserDto;
+import com.senla.training.library.dto.UserForRegisterDto;
+import com.senla.training.library.dto.converter.SecurityDtoConverter;
 import com.senla.training.library.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -15,12 +16,12 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
-    private final PasswordEncoder bcryptEncoder;
+    private final SecurityDtoConverter securityDtoConverter;
 
     public JwtUserDetailsService(UserService userService,
-                                 PasswordEncoder bcryptEncoder) {
+                                 PasswordEncoder bcryptEncoder, SecurityDtoConverter securityDtoConverter) {
         this.userService = userService;
-        this.bcryptEncoder = bcryptEncoder;
+        this.securityDtoConverter = securityDtoConverter;
     }
 
     @Override
@@ -44,12 +45,12 @@ public class JwtUserDetailsService implements UserDetailsService {
         return result;
     }
 
-    public void save(AuthenticationUserDto authenticationUserDto) {
-        log.info("Start saving new user");
-        User newUser = new User();
-        newUser.setUsername(authenticationUserDto.getUsername());
-        newUser.setPassword(bcryptEncoder.encode(authenticationUserDto.getPassword()));
-        userService.add(newUser);
+    public void save(UserForRegisterDto userForRegisterDto) {
+        log.info("Start saving new user, username = {}", userForRegisterDto.getUsername());
+//        User newUser = new User();
+//        newUser.setUsername(authenticationUserDto.getUsername());
+//        newUser.setPassword(bcryptEncoder.encode(authenticationUserDto.getPassword()));
+        userService.add(securityDtoConverter.userForRegisterDtoToUser(userForRegisterDto));
         log.info("New user has saved successfully");
     }
 }

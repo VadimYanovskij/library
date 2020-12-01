@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,29 +21,54 @@ import javax.persistence.EntityNotFoundException;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException exception) {
+    public ResponseEntity<String> handleEntityNotFoundException(
+            EntityNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleEntityAlreadyDeleted(EntityAlreadyDeleted exception) {
+    public ResponseEntity<String> handleEntityAlreadyDeleted(
+            EntityAlreadyDeleted exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
+    public ResponseEntity<String> handleHttpMessageNotReadableException(
+            HttpMessageNotReadableException exception) {
         log.error(exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleEmptyResultDataAccessException(EmptyResultDataAccessException exception) {
+    public ResponseEntity<String> handleEmptyResultDataAccessException(
+            EmptyResultDataAccessException exception) {
         log.error(exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
+    public ResponseEntity<String> handleDataIntegrityViolationException(
+            DataIntegrityViolationException exception) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleHttpMediaTypeNotSupportedException(
+            HttpMediaTypeNotSupportedException exception) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException exception) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler
+    public ResponseEntity<String> handleIllegalArgumentException(
+            IllegalArgumentException exception) {
         log.error(exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
