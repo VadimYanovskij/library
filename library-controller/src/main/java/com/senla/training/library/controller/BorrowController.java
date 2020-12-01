@@ -13,6 +13,7 @@ import com.senla.training.library.service.BorrowService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,10 @@ public class BorrowController {
         this.dtoConverter = dtoConverter;
     }
 
-    @JsonView({Details.class})
+
     @GetMapping
+    @Secured("ROLE_ADMIN")
+    @JsonView({Details.class})
     public ResponseEntity<List<BorrowDto>> findAll() {
         log.info("Listing borrows");
         ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
@@ -47,6 +50,7 @@ public class BorrowController {
     }
 
     @GetMapping("/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<BorrowDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding borrow with id = {}", id);
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
@@ -60,6 +64,7 @@ public class BorrowController {
     }
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<BorrowDto> add(@Validated(New.class) @RequestBody BorrowDto borrowDto,
                                          BindingResult bindingResult) {
         log.info("Creating borrow: {}", borrowDto);
@@ -80,6 +85,7 @@ public class BorrowController {
     }
 
     @PutMapping
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<BorrowDto> update(@Validated(Exist.class) @RequestBody BorrowDto borrowDto,
                                             BindingResult bindingResult) {
         log.info("Updating borrow: {}", borrowDto);
@@ -99,6 +105,7 @@ public class BorrowController {
         return result;
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/history/{bookId}")
     public ResponseEntity<List<BorrowHistoryDto>> borrowHistoryByBookId(@PathVariable("bookId") Integer bookId) {
         log.info("Listing borrows history of book with id = {}", bookId);
@@ -112,6 +119,7 @@ public class BorrowController {
         return result;
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/expired")
     public ResponseEntity<List<BorrowDto>> findExpiredBorrows() {
         log.info("Listing expired borrows");

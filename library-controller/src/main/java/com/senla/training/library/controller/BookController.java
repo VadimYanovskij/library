@@ -29,6 +29,7 @@ public class BookController {
     }
 
     @GetMapping("/all")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<BookDto>> findAll() {
         log.info("Listing all books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
@@ -42,7 +43,6 @@ public class BookController {
     }
 
     @GetMapping
-    @Secured("ROLE_USER")
     public ResponseEntity<List<BookDto>> findAllNotDeletedBooks() {
         log.info("Listing books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
@@ -69,6 +69,7 @@ public class BookController {
     }
 
     @GetMapping("/all/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<BookDto> findByIdWithDeleted(@PathVariable("id") Integer id) {
         log.info("Finding book (WithDeleted) with id = {}", id);
         ResponseEntity<BookDto> result = new ResponseEntity<>(
@@ -122,6 +123,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> softDeleteById(@PathVariable("id") Integer id) {
         log.info("Deleting book by id = {}", id);
         bookService.softDeleteById(id);

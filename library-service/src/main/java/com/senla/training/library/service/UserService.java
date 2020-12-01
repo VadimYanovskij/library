@@ -18,6 +18,6 @@ public interface UserService {
 
     User findByUsername(String userName);
 
-    User setRoles(String userName, Set<Role> roles);
+    Set<Role> setRoles(String userName, Set<Role> roles);
 
 }

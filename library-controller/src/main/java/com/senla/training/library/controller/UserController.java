@@ -12,8 +12,10 @@ import com.senla.training.library.transfer.New;
 import com.senla.training.library.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,7 @@ public class UserController {
     }
 
     @GetMapping
+    @Secured("ROLE_ADMIN")
     @JsonView(Details.class)
     public ResponseEntity<List<UserDto>> findAll() {
         log.info("Listing users");
@@ -63,6 +66,7 @@ public class UserController {
     }
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     @JsonView(Details.class)
     public ResponseEntity<UserDto> add(@Validated(New.class) @RequestBody UserDto userDto,
                                        BindingResult bindingResult) {
@@ -103,14 +107,13 @@ public class UserController {
         return result;
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping({"/setroles/{userName}"})
-    public ResponseEntity<UserDto> setRoles(@PathVariable("userName") String userName,
-                                            @RequestBody Set<Role> roles) {
+    public ResponseEntity<Set<Role>> setRoles(@PathVariable("userName") String userName,
+                                              @RequestBody Set<Role> roles) {
         log.info("Setting roles: {} for user: {}", roles, userName);
-        ResponseEntity<UserDto> result = new ResponseEntity<>(
-                dtoConverter.userToDto(
-                        userService.setRoles(userName, roles)
-                ),
+        ResponseEntity<Set<Role>> result = new ResponseEntity<>(
+                userService.setRoles(userName, roles),
                 HttpStatus.OK
         );
         log.info("Roles: {} for user: {} set successfully", roles, userName);

@@ -1,5 +1,6 @@
 package com.senla.training.library.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.senla.training.library.transfer.AdminDetails;
 import com.senla.training.library.transfer.Details;
