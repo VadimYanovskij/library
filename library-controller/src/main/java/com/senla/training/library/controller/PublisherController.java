@@ -23,18 +23,19 @@ import java.util.List;
 public class PublisherController {
 
     private final PublisherService publisherService;
-    private final PublisherConverterDto dtoConverter;
+    private final PublisherConverterDto publisherConverterDto;
 
-    public PublisherController(PublisherService publisherService, PublisherConverterDto dtoConverter) {
+    public PublisherController(PublisherService publisherService,
+                               PublisherConverterDto publisherConverterDto) {
         this.publisherService = publisherService;
-        this.dtoConverter = dtoConverter;
+        this.publisherConverterDto = publisherConverterDto;
     }
 
     @GetMapping
     public ResponseEntity<List<PublisherDto>> findAll() {
         log.info("Listing publishers");
         ResponseEntity<List<PublisherDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(
+                publisherConverterDto.entitiesToDtos(
                         publisherService.findAll()
                 ),
                 HttpStatus.OK
@@ -47,7 +48,7 @@ public class PublisherController {
     public ResponseEntity<PublisherDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding publisher with id = {}", id);
         ResponseEntity<PublisherDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                publisherConverterDto.entityToDto(
                         publisherService.findById(id)
                 ),
                 HttpStatus.OK
@@ -57,17 +58,17 @@ public class PublisherController {
     }
 
     @PostMapping
-    public ResponseEntity<PublisherDto> add(@Validated(New.class) @RequestBody PublisherDto publisherDto,
-                                            BindingResult bindingResult) {
+    public ResponseEntity<PublisherDto> add(
+            @Validated(New.class) @RequestBody PublisherDto publisherDto,
+            BindingResult bindingResult) {
         log.info("Creating publisher: {}", publisherDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<PublisherDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                publisherConverterDto.entityToDto(
                         publisherService.add(
-                                dtoConverter.dtoToEntity(publisherDto)
+                                publisherConverterDto.dtoToEntity(publisherDto)
                         )
                 ),
                 HttpStatus.OK
@@ -77,17 +78,17 @@ public class PublisherController {
     }
 
     @PutMapping
-    public ResponseEntity<PublisherDto> update(@Validated(Exist.class) @RequestBody PublisherDto publisherDto,
-                                               BindingResult bindingResult) {
+    public ResponseEntity<PublisherDto> update(
+            @Validated(Exist.class) @RequestBody PublisherDto publisherDto,
+            BindingResult bindingResult) {
         log.info("Updating publisher: {}", publisherDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<PublisherDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                publisherConverterDto.entityToDto(
                         publisherService.add(
-                                dtoConverter.dtoToEntity(publisherDto)
+                                publisherConverterDto.dtoToEntity(publisherDto)
                         )
                 ),
                 HttpStatus.OK

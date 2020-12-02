@@ -22,18 +22,19 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final CategoryConverterDto dtoConverter;
+    private final CategoryConverterDto categoryConverterDto;
 
-    public CategoryController(CategoryService categoryService, CategoryConverterDto dtoConverter) {
+    public CategoryController(CategoryService categoryService,
+                              CategoryConverterDto categoryConverterDto) {
         this.categoryService = categoryService;
-        this.dtoConverter = dtoConverter;
+        this.categoryConverterDto = categoryConverterDto;
     }
 
     @GetMapping
     public ResponseEntity<List<CategoryDto>> findAll() {
         log.info("Listing categories");
         ResponseEntity<List<CategoryDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(
+                categoryConverterDto.entitiesToDtos(
                         categoryService.findAll()
                 ),
                 HttpStatus.OK
@@ -46,7 +47,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding category with id = {}", id);
         ResponseEntity<CategoryDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                categoryConverterDto.entityToDto(
                         categoryService.findById(id)
                 ),
                 HttpStatus.OK
@@ -56,17 +57,17 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDto> add(@Validated(New.class) @RequestBody CategoryDto categoryDto,
-                                           BindingResult bindingResult) {
+    public ResponseEntity<CategoryDto> add(
+            @Validated(New.class) @RequestBody CategoryDto categoryDto,
+            BindingResult bindingResult) {
         log.info("Creating category: {}", categoryDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<CategoryDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                categoryConverterDto.entityToDto(
                         categoryService.add(
-                                dtoConverter.dtoToEntity(categoryDto)
+                                categoryConverterDto.dtoToEntity(categoryDto)
                         )
                 ),
                 HttpStatus.OK
@@ -76,17 +77,17 @@ public class CategoryController {
     }
 
     @PutMapping
-    public ResponseEntity<CategoryDto> update(@Validated(New.class) @RequestBody CategoryDto categoryDto,
-                                              BindingResult bindingResult){
+    public ResponseEntity<CategoryDto> update(
+            @Validated(New.class) @RequestBody CategoryDto categoryDto,
+            BindingResult bindingResult) {
         log.info("Updating category: {}", categoryDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<CategoryDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                categoryConverterDto.entityToDto(
                         categoryService.update(
-                                dtoConverter.dtoToEntity(categoryDto)
+                                categoryConverterDto.dtoToEntity(categoryDto)
                         )
                 ),
                 HttpStatus.OK
@@ -97,7 +98,7 @@ public class CategoryController {
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable("id") Integer id){
+    public ResponseEntity<String> deleteById(@PathVariable("id") Integer id) {
         log.info("Deleting category by id = {}", id);
         categoryService.deleteById(id);
         log.info("Category with id = {} deleted successfully", id);

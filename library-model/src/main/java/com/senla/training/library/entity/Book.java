@@ -1,6 +1,6 @@
 package com.senla.training.library.entity;
 
-import com.senla.training.library.enums.BookStatus;
+import com.senla.training.library.enums.BookStatusName;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,7 +35,7 @@ public class Book {
         return name;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "author_book",
             joinColumns = {@JoinColumn(name = "book_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "author_id", referencedColumnName = "id")})
@@ -61,8 +61,8 @@ public class Book {
         return category;
     }
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "book_status_id")
+    @ManyToOne
+    @JoinColumn(name = "book_status_id", referencedColumnName = "id")
     public BookStatus getBookStatus() {
         return bookStatus;
     }

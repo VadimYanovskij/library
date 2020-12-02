@@ -47,9 +47,6 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public void save(UserForRegisterDto userForRegisterDto) {
         log.info("Start saving new user, username = {}", userForRegisterDto.getUsername());
-//        User newUser = new User();
-//        newUser.setUsername(authenticationUserDto.getUsername());
-//        newUser.setPassword(bcryptEncoder.encode(authenticationUserDto.getPassword()));
         userService.add(securityDtoConverter.userForRegisterDtoToUser(userForRegisterDto));
         log.info("New user has saved successfully");
     }

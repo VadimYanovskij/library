@@ -36,7 +36,6 @@ public class PublisherServiceImpl implements PublisherService {
             log.info("Publisher with id = {} found in database", id);
             return result.get();
         } else {
-            log.error("Publisher with id = {} not found in database", id);
             throw new EntityNotFoundException("Publisher not found in database");
         }
     }
@@ -57,7 +56,6 @@ public class PublisherServiceImpl implements PublisherService {
             log.info("Publisher updated successfully in database with info: \" {}", publisher);
             return result;
         } else {
-            log.error("Publisher with id = {} not found ", publisher.getId());
             throw new EntityNotFoundException("Publisher not found");
         }
     }

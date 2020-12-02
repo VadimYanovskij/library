@@ -36,8 +36,7 @@ public class AuthorServiceImpl implements AuthorService {
             log.info("Author with id = {} found in database", id);
             return result.get();
         } else {
-            log.error("Author with id = {} not found in database", id);
-            throw new EntityNotFoundException("Category not found in database");
+            throw new EntityNotFoundException("Author not found in database");
         }
     }
 
@@ -53,7 +52,6 @@ public class AuthorServiceImpl implements AuthorService {
     public Author update(Author author) {
         log.info("Updating in database author: {}", author);
         if (!authorRepository.findById(author.getId()).isPresent()) {
-            log.error("Author with id = {} not found in database", author.getId());
             throw new EntityNotFoundException("Author not found in database");
         }
         Author result = authorRepository.save(author);

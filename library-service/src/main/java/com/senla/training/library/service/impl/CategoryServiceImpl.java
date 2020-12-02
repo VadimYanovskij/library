@@ -36,7 +36,6 @@ public class CategoryServiceImpl implements CategoryService {
             log.info("Category with id = {} found in database", id);
             return result.get();
         } else {
-            log.error("Category with id = {} not found in database", id);
             throw new EntityNotFoundException("Category not found in database");
         }
     }
@@ -53,11 +52,9 @@ public class CategoryServiceImpl implements CategoryService {
     public Category update(Category category) {
         log.info("Updating in database category: {}", category);
         if (!categoryRepository.findById(category.getId()).isPresent()) {
-            log.error("Category with id = {} not found ", category.getId());
             throw new EntityNotFoundException("Category not found");
         }
         if (!categoryRepository.findById(category.getParentId()).isPresent()) {
-            log.error("Parent category with id = {} not found", category.getParentId());
             throw new EntityNotFoundException("Parent category not found");
         }
         Category result = categoryRepository.save(category);

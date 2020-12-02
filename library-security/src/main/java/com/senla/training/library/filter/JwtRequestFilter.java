@@ -2,7 +2,10 @@ package com.senla.training.library.filter;
 
 import com.senla.training.library.service.BlockedTokenService;
 import com.senla.training.library.service.JwtTokenService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,10 +51,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final Optional<String> jwt = getJwtFromRequest(httpServletRequest);
         jwt.ifPresent(token -> {
             log.info("Start validating the access token {}", token);
-            if (blockedTokenService.findById(token) == null
-                    && jwtTokenService.validateToken(token)) {
-                setSecurityContext(new WebAuthenticationDetailsSource()
-                        .buildDetails(httpServletRequest), token);
+            try {
+                if (blockedTokenService.findById(token) == null
+                        && jwtTokenService.validateToken(token)) {
+                    setSecurityContext(new WebAuthenticationDetailsSource()
+                            .buildDetails(httpServletRequest), token);
+                }
+
+            } catch (IllegalArgumentException | MalformedJwtException | ExpiredJwtException e) {
+                log.error("Unable to get JWT Token or JWT Token has expired");
             }
         });
         log.info("End of token validating");

@@ -1,9 +1,13 @@
 package com.senla.training.library.service.impl;
 
 import com.senla.training.library.entity.Book;
+import com.senla.training.library.entity.BookStatus;
 import com.senla.training.library.entity.Borrow;
-import com.senla.training.library.enums.BookStatus;
+import com.senla.training.library.enums.BookStatusName;
+import com.senla.training.library.exception.BookAlreadyDeletedException;
+import com.senla.training.library.exception.BookOutStockException;
 import com.senla.training.library.repository.BookRepository;
+import com.senla.training.library.repository.BookStatusRepository;
 import com.senla.training.library.repository.BorrowRepository;
 import com.senla.training.library.service.BorrowService;
 import com.senla.training.library.specifications.BorrowSpecs;
@@ -21,12 +25,16 @@ public class BorrowServiceImpl implements BorrowService {
 
     private final BorrowRepository borrowRepository;
     private final BookRepository bookRepository;
+    private final BookStatusRepository bookStatusRepository;
     private final BorrowSpecs borrowSpecs;
 
-    public BorrowServiceImpl(BorrowRepository borrowRepository, BookRepository bookRepository,
+    public BorrowServiceImpl(BorrowRepository borrowRepository,
+                             BookRepository bookRepository,
+                             BookStatusRepository bookStatusRepository,
                              BorrowSpecs borrowSpecs) {
         this.borrowRepository = borrowRepository;
         this.bookRepository = bookRepository;
+        this.bookStatusRepository = bookStatusRepository;
         this.borrowSpecs = borrowSpecs;
     }
 
@@ -46,7 +54,6 @@ public class BorrowServiceImpl implements BorrowService {
             log.info("Borrow with id = {} found in database", id);
             return result.get();
         } else {
-            log.error("Borrow with id = {} not found in database", id);
             throw new EntityNotFoundException("Borrow not found in database");
         }
     }
@@ -54,7 +61,17 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public Borrow add(Borrow borrow) {
         log.info("Creating in database borrow: {}", borrow);
+        Book borrowBook = borrow.getBook();
+        if (borrowBook.getBookStatus().getBookStatusName() == BookStatusName.OUT_STOCK) {
+            throw new BookOutStockException("Book is out of stock!");
+        }
+        if (borrowBook.getBookStatus().getBookStatusName() == BookStatusName.DELETED) {
+            throw new BookAlreadyDeletedException("This book has DELETED status");
+        }
         Borrow result = borrowRepository.save(borrow);
+        borrowBook.setBookStatus(bookStatusRepository.findByBookStatusName(
+                BookStatusName.OUT_STOCK));
+        bookRepository.save(borrowBook);
         log.info("Borrow created in database successfully with info: \" {}", borrow);
         return result;
     }
@@ -67,7 +84,6 @@ public class BorrowServiceImpl implements BorrowService {
             log.info("Borrow updated successfully with info: \" {}", borrow);
             return result;
         } else {
-            log.error("Borrow with id = {} not found ", borrow.getId());
             throw new EntityNotFoundException("Borrow not found");
         }
     }
@@ -81,7 +97,6 @@ public class BorrowServiceImpl implements BorrowService {
             log.info("Borrows history of book with id = {} listed from database successfully", bookId);
             return result;
         } else {
-            log.error("Book with id = {} not found in database", bookId);
             throw new EntityNotFoundException("Book not found in database");
         }
     }
@@ -91,7 +106,8 @@ public class BorrowServiceImpl implements BorrowService {
         log.info("Listing expired borrows from database");
         List<Borrow> result = borrowRepository.findAll(
                 Specification
-                        .not(borrowSpecs.getBorrowsByBookStatus(BookStatus.DELETED))
+                        .not(borrowSpecs.getBorrowsByBookStatus(
+                                bookStatusRepository.findByBookStatusName(BookStatusName.DELETED)))
                         .and(borrowSpecs.getExpiredBorrows())
         );
         log.info("Borrows listed successfully from database");

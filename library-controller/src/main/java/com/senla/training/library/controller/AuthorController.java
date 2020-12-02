@@ -1,7 +1,6 @@
 package com.senla.training.library.controller;
 
 
-
 import com.senla.training.library.dto.AuthorDto;
 import com.senla.training.library.dto.converter.AuthorConverterDto;
 import com.senla.training.library.service.AuthorService;
@@ -23,18 +22,19 @@ import java.util.List;
 public class AuthorController {
 
     private final AuthorService authorService;
-    private final AuthorConverterDto dtoConverter;
+    private final AuthorConverterDto authorConverterDto;
 
-    public AuthorController(AuthorService authorService, AuthorConverterDto dtoConverter) {
+    public AuthorController(AuthorService authorService,
+                            AuthorConverterDto authorConverterDto) {
         this.authorService = authorService;
-        this.dtoConverter = dtoConverter;
+        this.authorConverterDto = authorConverterDto;
     }
 
     @GetMapping
     ResponseEntity<List<AuthorDto>> findAll() {
         log.info("Listing authors");
         ResponseEntity<List<AuthorDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(
+                authorConverterDto.entitiesToDtos(
                         authorService.findAll()
                 ),
                 HttpStatus.OK
@@ -47,7 +47,7 @@ public class AuthorController {
     ResponseEntity<AuthorDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding author with id = {}", id);
         ResponseEntity<AuthorDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                authorConverterDto.entityToDto(
                         authorService.findById(id)
                 ),
                 HttpStatus.OK
@@ -57,17 +57,17 @@ public class AuthorController {
     }
 
     @PostMapping
-    ResponseEntity<AuthorDto> add(@Validated(New.class) @RequestBody AuthorDto authorDto,
-                                  BindingResult bindingResult) {
+    ResponseEntity<AuthorDto> add(
+            @Validated(New.class) @RequestBody AuthorDto authorDto,
+            BindingResult bindingResult) {
         log.info("Creating author: {}", authorDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<AuthorDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                authorConverterDto.entityToDto(
                         authorService.add(
-                                dtoConverter.dtoToEntity(authorDto)
+                                authorConverterDto.dtoToEntity(authorDto)
                         )
                 ),
                 HttpStatus.OK
@@ -77,17 +77,17 @@ public class AuthorController {
     }
 
     @PutMapping
-    ResponseEntity<AuthorDto> update(@Validated(Exist.class) @RequestBody AuthorDto authorDto,
-                                     BindingResult bindingResult) {
+    ResponseEntity<AuthorDto> update(
+            @Validated(Exist.class) @RequestBody AuthorDto authorDto,
+            BindingResult bindingResult) {
         log.info("Updating author: {}", authorDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<AuthorDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                authorConverterDto.entityToDto(
                         authorService.update(
-                                dtoConverter.dtoToEntity(authorDto)
+                                authorConverterDto.dtoToEntity(authorDto)
                         )
                 ),
                 HttpStatus.OK

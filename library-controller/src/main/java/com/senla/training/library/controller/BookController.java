@@ -1,7 +1,9 @@
 package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.BookDto;
+import com.senla.training.library.dto.BookEditDto;
 import com.senla.training.library.dto.converter.BookConverterDto;
+import com.senla.training.library.dto.converter.BookEditConverterDto;
 import com.senla.training.library.service.BookService;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
@@ -21,11 +23,15 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
-    private final BookConverterDto dtoConverter;
+    private final BookConverterDto bookConverterDto;
+    private final BookEditConverterDto bookEditConverterDto;
 
-    public BookController(BookService bookService, BookConverterDto dtoConverter) {
+    public BookController(BookService bookService,
+                          BookConverterDto bookConverterDto,
+                          BookEditConverterDto bookEditConverterDto) {
         this.bookService = bookService;
-        this.dtoConverter = dtoConverter;
+        this.bookConverterDto = bookConverterDto;
+        this.bookEditConverterDto = bookEditConverterDto;
     }
 
     @GetMapping("/all")
@@ -33,7 +39,7 @@ public class BookController {
     public ResponseEntity<List<BookDto>> findAll() {
         log.info("Listing all books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(
+                bookConverterDto.entitiesToDtos(
                         bookService.findAll()
                 ),
                 HttpStatus.OK
@@ -46,7 +52,7 @@ public class BookController {
     public ResponseEntity<List<BookDto>> findAllNotDeletedBooks() {
         log.info("Listing books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(
+                bookConverterDto.entitiesToDtos(
                         bookService.findAllNotDeletedBooks()
                 ),
                 HttpStatus.OK
@@ -59,7 +65,7 @@ public class BookController {
     public ResponseEntity<BookDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding book with id = {}", id);
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                bookConverterDto.entityToDto(
                         bookService.findById(id)
                 ),
                 HttpStatus.OK
@@ -73,7 +79,7 @@ public class BookController {
     public ResponseEntity<BookDto> findByIdWithDeleted(@PathVariable("id") Integer id) {
         log.info("Finding book (WithDeleted) with id = {}", id);
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                bookConverterDto.entityToDto(
                         bookService.findByIdWithDeleted(id)
                 ),
                 HttpStatus.OK
@@ -83,42 +89,42 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> add(@Validated(New.class) @RequestBody BookDto bookDto,
-                                       BindingResult bindingResult) {
-        log.info("Creating book: {}", bookDto);
+    public ResponseEntity<BookDto> add(
+            @Validated(New.class) @RequestBody BookEditDto bookEditDto,
+            BindingResult bindingResult) {
+        log.info("Creating book: {}", bookEditDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                bookConverterDto.entityToDto(
                         bookService.add(
-                                dtoConverter.dtoToEntity(bookDto)
+                                bookEditConverterDto.dtoToEntity(bookEditDto)
                         )
                 ),
                 HttpStatus.OK
         );
-        log.info("Book created successfully with info: \" {}", bookDto);
+        log.info("Book created successfully with info: \" {}", bookEditDto);
         return result;
     }
 
     @PutMapping
-    public ResponseEntity<BookDto> update(@Validated(Exist.class) @RequestBody BookDto bookDto,
-                                          BindingResult bindingResult) {
-        log.info("Updating book: {}", bookDto);
+    public ResponseEntity<BookDto> update(
+            @Validated(Exist.class) @RequestBody BookEditDto bookEditDto,
+            BindingResult bindingResult) {
+        log.info("Updating book: {}", bookEditDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                bookConverterDto.entityToDto(
                         bookService.update(
-                                dtoConverter.dtoToEntity(bookDto)
+                                bookEditConverterDto.dtoToEntity(bookEditDto)
                         )
                 ),
                 HttpStatus.OK
         );
-        log.info("Book updated successfully with info: \" {}", bookDto);
+        log.info("Book updated successfully with info: \" {}", bookEditDto);
         return result;
     }
 

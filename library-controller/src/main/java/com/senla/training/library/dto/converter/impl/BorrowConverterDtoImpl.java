@@ -41,14 +41,17 @@ public class BorrowConverterDtoImpl implements BorrowConverterDto {
     @Override
     public Borrow dtoToEntity(BorrowDto borrowDto) {
         log.info("Converting borrowDto with id = {} to borrow", borrowDto.getId());
-        Borrow result = new Borrow(
-                borrowDto.getId(),
-                userService.findById(borrowDto.getUserId()),
-                bookService.findById(borrowDto.getBookId()),
-                borrowDto.getBorrowDate(),
-                borrowDto.getRepaymentDate(),
-                borrowDto.getReturnDate()
-        );
+        Borrow result = new Borrow();
+        result.setId(borrowDto.getId());
+        if (borrowDto.getUserId() != null) {
+            result.setUser(userService.findById(borrowDto.getUserId()));
+        }
+        if (borrowDto.getBookId() != null) {
+            result.setBook(bookService.findById(borrowDto.getBookId()));
+        }
+        result.setBorrowDate(borrowDto.getBorrowDate());
+        result.setRepaymentDate(borrowDto.getRepaymentDate());
+        result.setReturnDate(borrowDto.getReturnDate());
         log.info("BorrowDto converted successfully");
         return result;
     }

@@ -3,14 +3,12 @@ package com.senla.training.library.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.senla.training.library.dto.BorrowDto;
 import com.senla.training.library.dto.BorrowHistoryDto;
-
 import com.senla.training.library.dto.converter.BorrowConverterDto;
 import com.senla.training.library.dto.converter.BorrowHistoryConverterDto;
+import com.senla.training.library.service.BorrowService;
 import com.senla.training.library.transfer.Details;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
-import com.senla.training.library.service.BorrowService;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +25,16 @@ import java.util.List;
 public class BorrowController {
 
     private final BorrowService borrowService;
-    private final BorrowConverterDto dtoConverter;
+    private final BorrowConverterDto borrowConverterDto;
     private final BorrowHistoryConverterDto borrowHistoryConverterDto;
 
-    public BorrowController(BorrowService borrowService, BorrowConverterDto dtoConverter,
+    public BorrowController(BorrowService borrowService,
+                            BorrowConverterDto borrowConverterDto,
                             BorrowHistoryConverterDto borrowHistoryConverterDto) {
         this.borrowService = borrowService;
-        this.dtoConverter = dtoConverter;
+        this.borrowConverterDto = borrowConverterDto;
         this.borrowHistoryConverterDto = borrowHistoryConverterDto;
     }
-
 
     @GetMapping
     @Secured("ROLE_ADMIN")
@@ -44,7 +42,7 @@ public class BorrowController {
     public ResponseEntity<List<BorrowDto>> findAll() {
         log.info("Listing borrows");
         ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(
+                borrowConverterDto.entitiesToDtos(
                         borrowService.findAll()
                 ),
                 HttpStatus.OK
@@ -58,7 +56,7 @@ public class BorrowController {
     public ResponseEntity<BorrowDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding borrow with id = {}", id);
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                borrowConverterDto.entityToDto(
                         borrowService.findById(id)
                 ),
                 HttpStatus.OK
@@ -69,17 +67,17 @@ public class BorrowController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<BorrowDto> add(@Validated(New.class) @RequestBody BorrowDto borrowDto,
-                                         BindingResult bindingResult) {
+    public ResponseEntity<BorrowDto> add(
+            @Validated(New.class) @RequestBody BorrowDto borrowDto,
+            BindingResult bindingResult) {
         log.info("Creating borrow: {}", borrowDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                borrowConverterDto.entityToDto(
                         borrowService.add(
-                                dtoConverter.dtoToEntity(borrowDto)
+                                borrowConverterDto.dtoToEntity(borrowDto)
                         )
                 ),
                 HttpStatus.OK
@@ -90,17 +88,17 @@ public class BorrowController {
 
     @PutMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<BorrowDto> update(@Validated(Exist.class) @RequestBody BorrowDto borrowDto,
-                                            BindingResult bindingResult) {
+    public ResponseEntity<BorrowDto> update(
+            @Validated(Exist.class) @RequestBody BorrowDto borrowDto,
+            BindingResult bindingResult) {
         log.info("Updating borrow: {}", borrowDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                borrowConverterDto.entityToDto(
                         borrowService.update(
-                                dtoConverter.dtoToEntity(borrowDto)
+                                borrowConverterDto.dtoToEntity(borrowDto)
                         )
                 ),
                 HttpStatus.OK
@@ -111,7 +109,8 @@ public class BorrowController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/history/{bookId}")
-    public ResponseEntity<List<BorrowHistoryDto>> borrowHistoryByBookId(@PathVariable("bookId") Integer bookId) {
+    public ResponseEntity<List<BorrowHistoryDto>> borrowHistoryByBookId(
+            @PathVariable("bookId") Integer bookId) {
         log.info("Listing borrows history of book with id = {}", bookId);
         ResponseEntity<List<BorrowHistoryDto>> result = new ResponseEntity<>(
                 borrowHistoryConverterDto.entitiesToDtos(
@@ -128,7 +127,7 @@ public class BorrowController {
     public ResponseEntity<List<BorrowDto>> findExpiredBorrows() {
         log.info("Listing expired borrows");
         ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(borrowService.findExpiredBorrows()
+                borrowConverterDto.entitiesToDtos(borrowService.findExpiredBorrows()
                 ),
                 HttpStatus.OK
         );

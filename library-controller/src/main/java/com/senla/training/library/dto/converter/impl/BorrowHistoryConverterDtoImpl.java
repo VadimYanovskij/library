@@ -27,7 +27,8 @@ public class BorrowHistoryConverterDtoImpl implements BorrowHistoryConverterDto 
                 borrow.getBook().getPublicationYear(),
                 borrow.getBook().getCategory().getId(),
                 borrow.getBook().getCategory().getCategoryName(),
-                borrow.getBook().getBookStatus().name(),
+                borrow.getBook().getBookStatus().getId(),
+                borrow.getBook().getBookStatus().getBookStatusName().name(),
                 borrow.getBorrowDate(),
                 borrow.getRepaymentDate(),
                 borrow.getReturnDate()

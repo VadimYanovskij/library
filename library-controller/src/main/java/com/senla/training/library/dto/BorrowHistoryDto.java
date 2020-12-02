@@ -25,6 +25,7 @@ public class BorrowHistoryDto {
     private Integer bookPublicationYear;
     private Integer bookCategoryId;
     private String bookCategoryName;
+    private Integer bookStatusId;
     private String bookStatusName;
     private LocalDate borrowDate;
     private LocalDate repaymentDate;

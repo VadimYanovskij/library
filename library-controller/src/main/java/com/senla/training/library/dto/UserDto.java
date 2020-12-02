@@ -8,11 +8,9 @@ import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import com.senla.training.library.entity.Role;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.LocalDate;
@@ -22,6 +20,7 @@ import java.util.Set;
 @Setter
 @ToString
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
 
     @Null(groups = {New.class})
@@ -34,6 +33,7 @@ public class UserDto {
     private String username;
 
     @NotNull(groups = {New.class})
+    @Email(groups = {New.class, Exist.class})
     @JsonView({Details.class, AdminDetails.class})
     private String email;
 
@@ -55,5 +55,5 @@ public class UserDto {
 
     @JsonView({AdminDetails.class})
     @NotNull(groups = {New.class})
-    private Set<Role> roles;
+    private Set<Integer> roleIds;
 }

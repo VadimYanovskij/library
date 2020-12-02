@@ -27,13 +27,14 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
-    private final UserConverterDto dtoConverter;
+    private final UserConverterDto userConverterDto;
     private final RoleConverterDto roleConverterDto;
 
-    public UserController(UserService userService, UserConverterDto dtoConverter,
+    public UserController(UserService userService,
+                          UserConverterDto userConverterDto,
                           RoleConverterDto roleConverterDto) {
         this.userService = userService;
-        this.dtoConverter = dtoConverter;
+        this.userConverterDto = userConverterDto;
         this.roleConverterDto = roleConverterDto;
     }
 
@@ -43,7 +44,7 @@ public class UserController {
     public ResponseEntity<List<UserDto>> findAll() {
         log.info("Listing users");
         ResponseEntity<List<UserDto>> result = new ResponseEntity<>(
-                dtoConverter.entitiesToDtos(
+                userConverterDto.entitiesToDtos(
                         userService.findAll()
                 ),
                 HttpStatus.OK
@@ -57,7 +58,7 @@ public class UserController {
     public ResponseEntity<UserDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding user with id = {}", id);
         ResponseEntity<UserDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                userConverterDto.entityToDto(
                         userService.findById(id)
                 ),
                 HttpStatus.OK
@@ -69,17 +70,17 @@ public class UserController {
     @PostMapping
     @Secured("ROLE_ADMIN")
     @JsonView(Details.class)
-    public ResponseEntity<UserDto> add(@Validated(New.class) @RequestBody UserDto userDto,
-                                       BindingResult bindingResult) {
+    public ResponseEntity<UserDto> add(
+            @Validated(New.class) @RequestBody UserDto userDto,
+            BindingResult bindingResult) {
         log.info("Creating user: {}", userDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<UserDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                userConverterDto.entityToDto(
                         userService.add(
-                                dtoConverter.dtoToEntity(userDto)
+                                userConverterDto.dtoToEntity(userDto)
                         )
                 ),
                 HttpStatus.OK
@@ -89,17 +90,17 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> update(@Validated(Exist.class)@RequestBody UserDto userDto,
-                                          BindingResult bindingResult) {
+    public ResponseEntity<UserDto> update(
+            @Validated(Exist.class) @RequestBody UserDto userDto,
+            BindingResult bindingResult) {
         log.info("Updating user: {}", userDto);
         if (bindingResult.hasErrors()) {
-            log.error("Error! Wrong request body.");
-            return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Wrong request body!");
         }
         ResponseEntity<UserDto> result = new ResponseEntity<>(
-                dtoConverter.entityToDto(
+                userConverterDto.entityToDto(
                         userService.update(
-                                dtoConverter.dtoToEntity(userDto)
+                                userConverterDto.dtoToEntity(userDto)
                         )
                 ),
                 HttpStatus.OK
@@ -111,18 +112,14 @@ public class UserController {
     @Secured("ROLE_ADMIN")
     @PutMapping({"/setroles/{userName}"})
     public ResponseEntity<List<RoleDto>> setRoles(@PathVariable("userName") String userName,
-                                                 @RequestBody List<RoleDto> roleDtos) {
-        log.info("Setting roles: {} for user: {}", roleDtos, userName);
+                                                  @RequestBody Set<Integer> roleIds) {
+        log.info("Setting roles: {} for user: {}", roleIds, userName);
         ResponseEntity<List<RoleDto>> result = new ResponseEntity<>(
                 roleConverterDto.entitiesToDtos(
-                        userService.setRoles(
-                                userName,
-                                roleConverterDto.dtosToEntities(roleDtos)
-                        )
-                ),
+                        userService.setRoles(userName, roleIds)),
                 HttpStatus.OK
         );
-        log.info("Roles: {} for user: {} set successfully", roleDtos, userName);
+        log.info("Roles: {} for user: {} set successfully", roleIds, userName);
         return result;
     }
 }

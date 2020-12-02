@@ -1,9 +1,10 @@
 package com.senla.training.library.service.impl;
 
 import com.senla.training.library.entity.Book;
-import com.senla.training.library.enums.BookStatus;
-import com.senla.training.library.exception.EntityAlreadyDeleted;
+import com.senla.training.library.enums.BookStatusName;
+import com.senla.training.library.exception.BookAlreadyDeletedException;
 import com.senla.training.library.repository.BookRepository;
+import com.senla.training.library.repository.BookStatusRepository;
 import com.senla.training.library.service.BookService;
 import com.senla.training.library.specifications.BookSpecs;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,14 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final BookStatusRepository bookStatusRepository;
     private final BookSpecs bookSpecs;
 
-    public BookServiceImpl(BookRepository bookRepository, BookSpecs bookSpecs) {
+    public BookServiceImpl(BookRepository bookRepository,
+                           BookStatusRepository bookStatusRepository,
+                           BookSpecs bookSpecs) {
         this.bookRepository = bookRepository;
+        this.bookStatusRepository = bookStatusRepository;
         this.bookSpecs = bookSpecs;
     }
 
@@ -39,7 +44,8 @@ public class BookServiceImpl implements BookService {
         log.info("Listing books without deleted from database");
         List<Book> result = bookRepository.findAll(
                 Specification
-                        .not(bookSpecs.getBooksByBookStatus(BookStatus.DELETED))
+                        .not(bookSpecs.getBooksByBookStatusId(bookStatusRepository.findByBookStatusName(
+                                BookStatusName.DELETED)))
         );
         log.info("Books without deleted listed successfully from database");
         return result;
@@ -51,13 +57,11 @@ public class BookServiceImpl implements BookService {
         Optional<Book> result = bookRepository.findById(id);
         if (result.isPresent()) {
             log.info("Book with id = {} found in database", id);
-            if (result.get().getBookStatus() == BookStatus.DELETED) {
-                log.error("Book with id = {} has DELETED status", id);
-                throw new EntityAlreadyDeleted("This book has DELETED status");
+            if (result.get().getBookStatus().getBookStatusName() == BookStatusName.DELETED) {
+                throw new BookAlreadyDeletedException("This book has DELETED status");
             }
             return result.get();
         } else {
-            log.error("Book with id = {} not found in database", id);
             throw new EntityNotFoundException("Book not found in database");
         }
     }
@@ -70,7 +74,6 @@ public class BookServiceImpl implements BookService {
             log.info("Book (WithDeleted) with id = {} found in database", id);
             return result.get();
         } else {
-            log.error("Book (WithDeleted) with id = {} not found in database", id);
             throw new EntityNotFoundException("Book not found in database");
         }
     }
@@ -86,12 +89,31 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book update(Book book) {
         log.info("Updating in database book: {}", book);
-        if (bookRepository.findById(book.getId()).isPresent()) {
-            Book result = bookRepository.save(book);
+        Optional<Book> bookForUpdate = bookRepository.findById(book.getId());
+        if (bookForUpdate.isPresent()) {
+            Book updatedBook = bookForUpdate.get();
+            if (book.getName() != null) {
+                updatedBook.setName(book.getName());
+            }
+            if (book.getAuthors() != null){
+                updatedBook.setAuthors(book.getAuthors());
+            }
+            if (book.getPublisher() != null){
+                updatedBook.setPublisher(book.getPublisher());
+            }
+            if (book.getPublicationYear() != null) {
+                updatedBook.setPublicationYear(book.getPublicationYear());
+            }
+            if (book.getCategory() != null) {
+                updatedBook.setCategory(book.getCategory());
+            }
+            if (book.getBookStatus() != null) {
+                updatedBook.setBookStatus(book.getBookStatus());
+            }
+            Book result = bookRepository.save(updatedBook);
             log.info("Book updated successfully in database with info: \" {}", book);
             return result;
         } else {
-            log.error("Book with id = {} not found ", book.getId());
             throw new EntityNotFoundException("Book not found in database");
         }
     }
@@ -100,11 +122,11 @@ public class BookServiceImpl implements BookService {
     public void softDeleteById(Integer id) {
         log.info("Deleting book in database by id = {}", id);
         Book book = findById(id);
-        if (book.getBookStatus() == BookStatus.DELETED) {
-            log.error("Book has already been deleted!");
-            throw new EntityAlreadyDeleted("Book has already been deleted!");
+        if (book.getBookStatus().getBookStatusName() == BookStatusName.DELETED) {
+            throw new BookAlreadyDeletedException("Book has already been deleted!");
         }
-        book.setBookStatus(BookStatus.DELETED);
+        book.setBookStatus(bookStatusRepository.findByBookStatusName(
+                BookStatusName.DELETED));
         bookRepository.save(book);
         log.info("Book with id = {} deleted in database successfully", id);
     }
