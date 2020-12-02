@@ -29,31 +29,31 @@ public class UserDto {
     @JsonView({Details.class, AdminDetails.class})
     private Integer id;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     @JsonView({Details.class, AdminDetails.class})
     private String username;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     @JsonView({Details.class, AdminDetails.class})
     private String email;
 
-    @JsonView({AdminDetails.class})
-    @NotNull(groups = {New.class, Exist.class})
+    @JsonIgnore
+    @NotNull(groups = {New.class})
     private String password;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     @JsonView({Details.class, AdminDetails.class})
     private String firstname;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     @JsonView({Details.class, AdminDetails.class})
     private String lastname;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     @JsonView({Details.class, AdminDetails.class})
     private LocalDate birthday;
 
     @JsonView({AdminDetails.class})
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     private Set<Role> roles;
 }

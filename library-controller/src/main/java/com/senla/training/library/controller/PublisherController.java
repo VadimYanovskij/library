@@ -2,7 +2,7 @@ package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.PublisherDto;
 
-import com.senla.training.library.dto.converter.DtoConverter;
+import com.senla.training.library.dto.converter.PublisherConverterDto;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import com.senla.training.library.service.PublisherService;
@@ -23,9 +23,9 @@ import java.util.List;
 public class PublisherController {
 
     private final PublisherService publisherService;
-    private final DtoConverter dtoConverter;
+    private final PublisherConverterDto dtoConverter;
 
-    public PublisherController(PublisherService publisherService, DtoConverter dtoConverter) {
+    public PublisherController(PublisherService publisherService, PublisherConverterDto dtoConverter) {
         this.publisherService = publisherService;
         this.dtoConverter = dtoConverter;
     }
@@ -34,7 +34,7 @@ public class PublisherController {
     public ResponseEntity<List<PublisherDto>> findAll() {
         log.info("Listing publishers");
         ResponseEntity<List<PublisherDto>> result = new ResponseEntity<>(
-                dtoConverter.publishersToDtos(
+                dtoConverter.entitiesToDtos(
                         publisherService.findAll()
                 ),
                 HttpStatus.OK
@@ -47,7 +47,7 @@ public class PublisherController {
     public ResponseEntity<PublisherDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding publisher with id = {}", id);
         ResponseEntity<PublisherDto> result = new ResponseEntity<>(
-                dtoConverter.publisherToDto(
+                dtoConverter.entityToDto(
                         publisherService.findById(id)
                 ),
                 HttpStatus.OK
@@ -65,9 +65,9 @@ public class PublisherController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<PublisherDto> result = new ResponseEntity<>(
-                dtoConverter.publisherToDto(
+                dtoConverter.entityToDto(
                         publisherService.add(
-                                dtoConverter.publisherDtoToEntity(publisherDto)
+                                dtoConverter.dtoToEntity(publisherDto)
                         )
                 ),
                 HttpStatus.OK
@@ -85,9 +85,9 @@ public class PublisherController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<PublisherDto> result = new ResponseEntity<>(
-                dtoConverter.publisherToDto(
+                dtoConverter.entityToDto(
                         publisherService.add(
-                                dtoConverter.publisherDtoToEntity(publisherDto)
+                                dtoConverter.dtoToEntity(publisherDto)
                         )
                 ),
                 HttpStatus.OK

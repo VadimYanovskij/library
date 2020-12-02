@@ -1,7 +1,7 @@
 package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.CategoryDto;
-import com.senla.training.library.dto.converter.DtoConverter;
+import com.senla.training.library.dto.converter.CategoryConverterDto;
 
 import com.senla.training.library.transfer.New;
 import com.senla.training.library.service.CategoryService;
@@ -22,9 +22,9 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final DtoConverter dtoConverter;
+    private final CategoryConverterDto dtoConverter;
 
-    public CategoryController(CategoryService categoryService, DtoConverter dtoConverter) {
+    public CategoryController(CategoryService categoryService, CategoryConverterDto dtoConverter) {
         this.categoryService = categoryService;
         this.dtoConverter = dtoConverter;
     }
@@ -33,7 +33,7 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDto>> findAll() {
         log.info("Listing categories");
         ResponseEntity<List<CategoryDto>> result = new ResponseEntity<>(
-                dtoConverter.categoriesToDtos(
+                dtoConverter.entitiesToDtos(
                         categoryService.findAll()
                 ),
                 HttpStatus.OK
@@ -46,7 +46,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding category with id = {}", id);
         ResponseEntity<CategoryDto> result = new ResponseEntity<>(
-                dtoConverter.categoryToDto(
+                dtoConverter.entityToDto(
                         categoryService.findById(id)
                 ),
                 HttpStatus.OK
@@ -64,9 +64,9 @@ public class CategoryController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<CategoryDto> result = new ResponseEntity<>(
-                dtoConverter.categoryToDto(
+                dtoConverter.entityToDto(
                         categoryService.add(
-                                dtoConverter.categoryDtoToEntity(categoryDto)
+                                dtoConverter.dtoToEntity(categoryDto)
                         )
                 ),
                 HttpStatus.OK
@@ -84,9 +84,9 @@ public class CategoryController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<CategoryDto> result = new ResponseEntity<>(
-                dtoConverter.categoryToDto(
+                dtoConverter.entityToDto(
                         categoryService.update(
-                                dtoConverter.categoryDtoToEntity(categoryDto)
+                                dtoConverter.dtoToEntity(categoryDto)
                         )
                 ),
                 HttpStatus.OK

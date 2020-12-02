@@ -1,7 +1,7 @@
 package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.BookDto;
-import com.senla.training.library.dto.converter.DtoConverter;
+import com.senla.training.library.dto.converter.BookConverterDto;
 import com.senla.training.library.service.BookService;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
@@ -21,9 +21,9 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
-    private final DtoConverter dtoConverter;
+    private final BookConverterDto dtoConverter;
 
-    public BookController(BookService bookService, DtoConverter dtoConverter) {
+    public BookController(BookService bookService, BookConverterDto dtoConverter) {
         this.bookService = bookService;
         this.dtoConverter = dtoConverter;
     }
@@ -33,7 +33,7 @@ public class BookController {
     public ResponseEntity<List<BookDto>> findAll() {
         log.info("Listing all books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
-                dtoConverter.booksToDtos(
+                dtoConverter.entitiesToDtos(
                         bookService.findAll()
                 ),
                 HttpStatus.OK
@@ -46,7 +46,7 @@ public class BookController {
     public ResponseEntity<List<BookDto>> findAllNotDeletedBooks() {
         log.info("Listing books");
         ResponseEntity<List<BookDto>> result = new ResponseEntity<>(
-                dtoConverter.booksToDtos(
+                dtoConverter.entitiesToDtos(
                         bookService.findAllNotDeletedBooks()
                 ),
                 HttpStatus.OK
@@ -59,7 +59,7 @@ public class BookController {
     public ResponseEntity<BookDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding book with id = {}", id);
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.bookToDto(
+                dtoConverter.entityToDto(
                         bookService.findById(id)
                 ),
                 HttpStatus.OK
@@ -73,7 +73,7 @@ public class BookController {
     public ResponseEntity<BookDto> findByIdWithDeleted(@PathVariable("id") Integer id) {
         log.info("Finding book (WithDeleted) with id = {}", id);
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.bookToDto(
+                dtoConverter.entityToDto(
                         bookService.findByIdWithDeleted(id)
                 ),
                 HttpStatus.OK
@@ -91,9 +91,9 @@ public class BookController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.bookToDto(
+                dtoConverter.entityToDto(
                         bookService.add(
-                                dtoConverter.bookDtoToEntity(bookDto)
+                                dtoConverter.dtoToEntity(bookDto)
                         )
                 ),
                 HttpStatus.OK
@@ -111,9 +111,9 @@ public class BookController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<BookDto> result = new ResponseEntity<>(
-                dtoConverter.bookToDto(
+                dtoConverter.entityToDto(
                         bookService.update(
-                                dtoConverter.bookDtoToEntity(bookDto)
+                                dtoConverter.dtoToEntity(bookDto)
                         )
                 ),
                 HttpStatus.OK

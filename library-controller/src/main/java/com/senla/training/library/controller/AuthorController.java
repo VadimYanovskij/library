@@ -3,7 +3,7 @@ package com.senla.training.library.controller;
 
 
 import com.senla.training.library.dto.AuthorDto;
-import com.senla.training.library.dto.converter.DtoConverter;
+import com.senla.training.library.dto.converter.AuthorConverterDto;
 import com.senla.training.library.service.AuthorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,9 @@ import java.util.List;
 public class AuthorController {
 
     private final AuthorService authorService;
-    private final DtoConverter dtoConverter;
+    private final AuthorConverterDto dtoConverter;
 
-    public AuthorController(AuthorService authorService, DtoConverter dtoConverter) {
+    public AuthorController(AuthorService authorService, AuthorConverterDto dtoConverter) {
         this.authorService = authorService;
         this.dtoConverter = dtoConverter;
     }
@@ -34,7 +34,7 @@ public class AuthorController {
     ResponseEntity<List<AuthorDto>> findAll() {
         log.info("Listing authors");
         ResponseEntity<List<AuthorDto>> result = new ResponseEntity<>(
-                dtoConverter.authorsToDtos(
+                dtoConverter.entitiesToDtos(
                         authorService.findAll()
                 ),
                 HttpStatus.OK
@@ -47,7 +47,7 @@ public class AuthorController {
     ResponseEntity<AuthorDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding author with id = {}", id);
         ResponseEntity<AuthorDto> result = new ResponseEntity<>(
-                dtoConverter.authorToDto(
+                dtoConverter.entityToDto(
                         authorService.findById(id)
                 ),
                 HttpStatus.OK
@@ -65,9 +65,9 @@ public class AuthorController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<AuthorDto> result = new ResponseEntity<>(
-                dtoConverter.authorToDto(
+                dtoConverter.entityToDto(
                         authorService.add(
-                                dtoConverter.authorDtoToEntity(authorDto)
+                                dtoConverter.dtoToEntity(authorDto)
                         )
                 ),
                 HttpStatus.OK
@@ -85,9 +85,9 @@ public class AuthorController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<AuthorDto> result = new ResponseEntity<>(
-                dtoConverter.authorToDto(
+                dtoConverter.entityToDto(
                         authorService.update(
-                                dtoConverter.authorDtoToEntity(authorDto)
+                                dtoConverter.dtoToEntity(authorDto)
                         )
                 ),
                 HttpStatus.OK

@@ -4,7 +4,6 @@ import com.senla.training.library.entity.Role;
 import com.senla.training.library.entity.User;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
 
@@ -18,6 +17,6 @@ public interface UserService {
 
     User findByUsername(String userName);
 
-    Set<Role> setRoles(String userName, Set<Role> roles);
+    List<Role> setRoles(String userName, List<Role> roles);
 
 }

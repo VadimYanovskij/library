@@ -3,8 +3,9 @@ package com.senla.training.library.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.senla.training.library.dto.BorrowDto;
 import com.senla.training.library.dto.BorrowHistoryDto;
-import com.senla.training.library.dto.converter.DtoConverter;
 
+import com.senla.training.library.dto.converter.BorrowConverterDto;
+import com.senla.training.library.dto.converter.BorrowHistoryConverterDto;
 import com.senla.training.library.transfer.Details;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
@@ -26,11 +27,14 @@ import java.util.List;
 public class BorrowController {
 
     private final BorrowService borrowService;
-    private final DtoConverter dtoConverter;
+    private final BorrowConverterDto dtoConverter;
+    private final BorrowHistoryConverterDto borrowHistoryConverterDto;
 
-    public BorrowController(BorrowService borrowService, DtoConverter dtoConverter) {
+    public BorrowController(BorrowService borrowService, BorrowConverterDto dtoConverter,
+                            BorrowHistoryConverterDto borrowHistoryConverterDto) {
         this.borrowService = borrowService;
         this.dtoConverter = dtoConverter;
+        this.borrowHistoryConverterDto = borrowHistoryConverterDto;
     }
 
 
@@ -40,7 +44,7 @@ public class BorrowController {
     public ResponseEntity<List<BorrowDto>> findAll() {
         log.info("Listing borrows");
         ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
-                dtoConverter.borrowsToDtos(
+                dtoConverter.entitiesToDtos(
                         borrowService.findAll()
                 ),
                 HttpStatus.OK
@@ -54,7 +58,7 @@ public class BorrowController {
     public ResponseEntity<BorrowDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding borrow with id = {}", id);
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
-                dtoConverter.borrowToDto(
+                dtoConverter.entityToDto(
                         borrowService.findById(id)
                 ),
                 HttpStatus.OK
@@ -73,9 +77,9 @@ public class BorrowController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
-                dtoConverter.borrowToDto(
+                dtoConverter.entityToDto(
                         borrowService.add(
-                                dtoConverter.borrowDtoToEntity(borrowDto)
+                                dtoConverter.dtoToEntity(borrowDto)
                         )
                 ),
                 HttpStatus.OK
@@ -94,9 +98,9 @@ public class BorrowController {
             return new ResponseEntity("Error! Wrong request body.", HttpStatus.BAD_REQUEST);
         }
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
-                dtoConverter.borrowToDto(
+                dtoConverter.entityToDto(
                         borrowService.update(
-                                dtoConverter.borrowDtoToEntity(borrowDto)
+                                dtoConverter.dtoToEntity(borrowDto)
                         )
                 ),
                 HttpStatus.OK
@@ -110,7 +114,7 @@ public class BorrowController {
     public ResponseEntity<List<BorrowHistoryDto>> borrowHistoryByBookId(@PathVariable("bookId") Integer bookId) {
         log.info("Listing borrows history of book with id = {}", bookId);
         ResponseEntity<List<BorrowHistoryDto>> result = new ResponseEntity<>(
-                dtoConverter.borrowsToBorrowHistoryDtos(
+                borrowHistoryConverterDto.entitiesToDtos(
                         borrowService.findAllByBookId(bookId)
                 ),
                 HttpStatus.OK
@@ -124,7 +128,7 @@ public class BorrowController {
     public ResponseEntity<List<BorrowDto>> findExpiredBorrows() {
         log.info("Listing expired borrows");
         ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
-                dtoConverter.borrowsToDtos(borrowService.findExpiredBorrows()
+                dtoConverter.entitiesToDtos(borrowService.findExpiredBorrows()
                 ),
                 HttpStatus.OK
         );

@@ -7,10 +7,9 @@ import com.senla.training.library.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -18,7 +17,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, EntityManager entityManager) {
         this.userRepository = userRepository;
     }
 
@@ -54,10 +53,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         log.info("Updating in database user with id = {}", user.getId());
-        if (userRepository.findById(user.getId()).isPresent()) {
-            User result = userRepository.save(user);
-            log.info("User updated successfully in database with info: \" {}", user);
-            return result;
+        Optional<User> userForUpdate = userRepository.findById(user.getId());
+        if (userForUpdate.isPresent()) {
+            User result = userForUpdate.get();
+            if (user.getEmail() != null) {
+                result.setEmail(user.getEmail());
+            }
+            if (user.getFirstname() != null) {
+                result.setFirstname(user.getFirstname());
+            }
+            if (user.getLastname() != null) {
+                result.setLastname(user.getLastname());
+            }
+            if (user.getBirthday() != null) {
+                result.setBirthday(user.getBirthday());
+            }
+            if (user.getPassword() != null) {
+                throw new IllegalArgumentException("You can't change password there");
+            }
+            if (user.getUsername() != null) {
+                throw new IllegalArgumentException("You can't change username there");
+            }
+            if (user.getRoles() != null) {
+                throw new IllegalArgumentException("You can't change roles there");
+            }
+            log.info("User updated successfully");
+            return userRepository.save(result);
         } else {
             log.error("User with id = {} not found ", user.getId());
             throw new EntityNotFoundException("User not found");
@@ -77,12 +98,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Role> setRoles(String userName, Set<Role> roles) {
+    public List<Role> setRoles(String userName, List<Role> roles) {
         log.info("Setting roles: {} for user: {} in database", roles, userName);
         User user = userRepository.findByUsername(userName);
-        user.setRoles(roles);
+        user.setRoles(new HashSet<>(roles));
         User result = userRepository.save(user);
         log.info("Roles: {} for user: {} set in database successfully", roles, userName);
-        return result.getRoles();
+        return new ArrayList<>(result.getRoles());
     }
 }
