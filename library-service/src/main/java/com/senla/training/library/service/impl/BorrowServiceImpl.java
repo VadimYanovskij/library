@@ -14,6 +14,7 @@ import com.senla.training.library.specifications.BorrowSpecs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -59,6 +60,7 @@ public class BorrowServiceImpl implements BorrowService {
     }
 
     @Override
+    @Transactional
     public Borrow add(Borrow borrow) {
         log.info("Creating in database borrow: {}", borrow);
         Book borrowBook = borrow.getBook();
