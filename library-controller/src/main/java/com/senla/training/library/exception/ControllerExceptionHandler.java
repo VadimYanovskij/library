@@ -1,6 +1,7 @@
 package com.senla.training.library.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -9,23 +10,31 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.HashMap;
+import java.util.Locale;
 
 @Slf4j
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
+    private final MessageSource messageSource;
+
+    public ControllerExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @ExceptionHandler
     public ResponseEntity<String> handleEntityNotFoundException(
-            EntityNotFoundException exception) {
+            EntityNotFoundException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.EntityNotFoundException",null,locale),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
