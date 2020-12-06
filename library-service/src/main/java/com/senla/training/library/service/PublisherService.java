@@ -2,17 +2,7 @@ package com.senla.training.library.service;
 
 import com.senla.training.library.entity.Publisher;
 
-import java.util.List;
-
-public interface PublisherService {
-
-    List<Publisher> findAll();
-
-    Publisher findById(Integer id);
-
-    Publisher add(Publisher publisher);
-
-    Publisher update(Publisher publisher);
+public interface PublisherService extends CommonService<Publisher> {
 
     void deleteById(Integer id);
 

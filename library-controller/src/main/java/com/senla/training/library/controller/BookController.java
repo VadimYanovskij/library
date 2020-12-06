@@ -2,8 +2,8 @@ package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.BookDto;
 import com.senla.training.library.dto.BookEditDto;
-import com.senla.training.library.dto.converter.BookConverterDto;
-import com.senla.training.library.dto.converter.BookEditConverterDto;
+import com.senla.training.library.converter.BookConverterDto;
+import com.senla.training.library.converter.BookEditConverterDto;
 import com.senla.training.library.service.BookService;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;

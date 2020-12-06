@@ -2,17 +2,7 @@ package com.senla.training.library.service;
 
 import com.senla.training.library.entity.Author;
 
-import java.util.List;
-
-public interface AuthorService {
-
-    List<Author> findAll();
-
-    Author findById(Integer id);
-
-    Author add(Author author);
-
-    Author update(Author author);
+public interface AuthorService extends CommonService<Author> {
 
     void deleteById(Integer id);
 }

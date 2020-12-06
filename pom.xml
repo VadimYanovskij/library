@@ -9,7 +9,8 @@
         <module>library-repository</module>
         <module>library-controller</module>
         <module>library-security</module>
-        <module>library-start</module>
+        <module>library-main</module>
+        <module>library-dto</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -25,7 +26,10 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
+<!--        <start-class>com.senla.training.library.LibraryApplication</start-class>-->
     </properties>
 
     <dependencies>
@@ -79,12 +83,16 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
     </build>
+
 
 </project>

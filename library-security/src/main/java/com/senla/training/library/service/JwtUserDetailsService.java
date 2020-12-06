@@ -1,7 +1,7 @@
 package com.senla.training.library.service;
 
 import com.senla.training.library.dto.UserForRegisterDto;
-import com.senla.training.library.dto.converter.SecurityDtoConverter;
+import com.senla.training.library.converter.SecurityDtoConverter;
 import com.senla.training.library.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;

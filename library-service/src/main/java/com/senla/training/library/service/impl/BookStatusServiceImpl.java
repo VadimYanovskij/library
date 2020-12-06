@@ -31,4 +31,19 @@ public class BookStatusServiceImpl implements BookStatusService {
             throw new EntityNotFoundException("Book status not found in database");
         }
     }
+
+    @Override
+    public BookStatus findByBookStatusName(BookStatusName bookStatusName) {
+        log.info("Finding book status with bookStatusName = {} in database",
+                bookStatusName);
+        Optional<BookStatus> result =
+                bookStatusRepository.findByBookStatusName(bookStatusName);
+        if (result.isPresent()) {
+            log.info("Book status with bookStatusName = {} found in database",
+                    bookStatusName);
+            return result.get();
+        } else {
+            throw new EntityNotFoundException("Book status not found in database");
+        }
+    }
 }

@@ -2,7 +2,7 @@ package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.PublisherDto;
 
-import com.senla.training.library.dto.converter.PublisherConverterDto;
+import com.senla.training.library.converter.PublisherConverterDto;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import com.senla.training.library.service.PublisherService;

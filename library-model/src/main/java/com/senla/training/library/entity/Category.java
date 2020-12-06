@@ -1,38 +1,28 @@
 package com.senla.training.library.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Setter
-@ToString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Table(name = "category", schema = "library")
 public class Category {
-    private Integer id;
-    private Integer parentId;
-    private String categoryName;
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer getId() {
-        return id;
-    }
+    private Integer id;
 
     @Basic
     @Column(name = "parent_id")
-    public Integer getParentId() {
-        return parentId;
-    }
+    private Integer parentId;
 
     @Basic
     @Column(name = "category_name")
-    public String getCategoryName() {
-        return categoryName;
-    }
-
+    private String categoryName;
 }

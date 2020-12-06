@@ -1,10 +1,7 @@
 package com.senla.training.library.service.impl;
 
-import com.senla.training.library.entity.Book;
 import com.senla.training.library.entity.Role;
-import com.senla.training.library.enums.BookStatusName;
 import com.senla.training.library.enums.RoleName;
-import com.senla.training.library.exception.BookAlreadyDeletedException;
 import com.senla.training.library.repository.RoleRepository;
 import com.senla.training.library.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +23,13 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByRoleName(RoleName roleName) {
         log.info("Finding role with roleName = {} in database", roleName);
-        Role result = repository.findByRoleName(roleName);
-        if (result == null) {
+        Optional<Role> result = repository.findByRoleName(roleName);
+        if (result.isPresent()) {
+            log.info("Role with roleName = {} found in database successfully", roleName);
+            return result.get();
+        } else {
             throw new EntityNotFoundException("Role not found");
         }
-        log.info("Role with roleName = {} found in database successfully", roleName);
-        return result;
     }
 
     @Override

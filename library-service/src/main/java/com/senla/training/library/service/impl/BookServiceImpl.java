@@ -4,31 +4,27 @@ import com.senla.training.library.entity.Book;
 import com.senla.training.library.enums.BookStatusName;
 import com.senla.training.library.exception.BookAlreadyDeletedException;
 import com.senla.training.library.repository.BookRepository;
-import com.senla.training.library.repository.BookStatusRepository;
 import com.senla.training.library.service.BookService;
-import com.senla.training.library.specifications.BookSpecs;
+import com.senla.training.library.service.BookStatusService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final BookStatusRepository bookStatusRepository;
-    private final BookSpecs bookSpecs;
+    private final BookStatusService bookStatusService;
 
     public BookServiceImpl(BookRepository bookRepository,
-                           BookStatusRepository bookStatusRepository,
-                           BookSpecs bookSpecs) {
+                           BookStatusService bookStatusService) {
         this.bookRepository = bookRepository;
-        this.bookStatusRepository = bookStatusRepository;
-        this.bookSpecs = bookSpecs;
+        this.bookStatusService = bookStatusService;
     }
 
     @Override
@@ -42,11 +38,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findAllNotDeletedBooks() {
         log.info("Listing books without deleted from database");
-        List<Book> result = bookRepository.findAll(
-                Specification
-                        .not(bookSpecs.getBooksByBookStatusId(bookStatusRepository.findByBookStatusName(
-                                BookStatusName.DELETED)))
-        );
+        List<Book> result = bookRepository.findAll().stream().
+                filter(book -> book.getBookStatus() != bookStatusService.
+                        findByBookStatusName(BookStatusName.DELETED))
+                .collect(Collectors.toList());
         log.info("Books without deleted listed successfully from database");
         return result;
     }
@@ -57,7 +52,8 @@ public class BookServiceImpl implements BookService {
         Optional<Book> result = bookRepository.findById(id);
         if (result.isPresent()) {
             log.info("Book with id = {} found in database", id);
-            if (result.get().getBookStatus().getBookStatusName() == BookStatusName.DELETED) {
+            if (result.get().getBookStatus().getBookStatusName() ==
+                    BookStatusName.DELETED) {
                 throw new BookAlreadyDeletedException("This book has DELETED status");
             }
             return result.get();
@@ -95,10 +91,10 @@ public class BookServiceImpl implements BookService {
             if (book.getName() != null) {
                 updatedBook.setName(book.getName());
             }
-            if (book.getAuthors() != null){
+            if (book.getAuthors() != null) {
                 updatedBook.setAuthors(book.getAuthors());
             }
-            if (book.getPublisher() != null){
+            if (book.getPublisher() != null) {
                 updatedBook.setPublisher(book.getPublisher());
             }
             if (book.getPublicationYear() != null) {
@@ -125,7 +121,7 @@ public class BookServiceImpl implements BookService {
         if (book.getBookStatus().getBookStatusName() == BookStatusName.DELETED) {
             throw new BookAlreadyDeletedException("Book has already been deleted!");
         }
-        book.setBookStatus(bookStatusRepository.findByBookStatusName(
+        book.setBookStatus(bookStatusService.findByBookStatusName(
                 BookStatusName.DELETED));
         bookRepository.save(book);
         log.info("Book with id = {} deleted in database successfully", id);

@@ -6,15 +6,7 @@ import com.senla.training.library.entity.User;
 import java.util.List;
 import java.util.Set;
 
-public interface UserService {
-
-    List<User> findAll();
-
-    User findById(Integer id);
-
-    User add(User user);
-
-    User update(User user);
+public interface UserService extends CommonService<User> {
 
     User findByUsername(String userName);
 

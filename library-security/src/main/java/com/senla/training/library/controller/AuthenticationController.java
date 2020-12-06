@@ -3,7 +3,7 @@ package com.senla.training.library.controller;
 import com.senla.training.library.dto.AuthenticationUserDto;
 import com.senla.training.library.dto.TokenDto;
 import com.senla.training.library.dto.UserForRegisterDto;
-import com.senla.training.library.dto.converter.SecurityDtoConverter;
+import com.senla.training.library.converter.SecurityDtoConverter;
 import com.senla.training.library.service.BlockedTokenService;
 import com.senla.training.library.service.JwtTokenService;
 import com.senla.training.library.service.JwtUserDetailsService;

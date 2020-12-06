@@ -90,18 +90,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String userName) {
         log.info("Finding user with userName = {} in database", userName);
-        User result = userRepository.findByUsername(userName);
-        if (result == null) {
+        Optional<User> result = userRepository.findByUsername(userName);
+        if (result.isPresent()) {
+            log.info("User with userName = {} found in database successfully", userName);
+            return result.get();
+        } else {
             throw new EntityNotFoundException("User not found");
         }
-        log.info("User with userName = {} found in database successfully", userName);
-        return result;
+
     }
 
     @Override
     public List<Role> setRoles(String userName, Set<Integer> roleIds) {
         log.info("Setting roles: {} for user: {} in database", roleIds, userName);
-        User user = userRepository.findByUsername(userName);
+        User user = findByUsername(userName);
         user.setRoles(roleIds.stream()
                 .map(id -> roleService.findById(id))
                 .collect(Collectors.toSet())

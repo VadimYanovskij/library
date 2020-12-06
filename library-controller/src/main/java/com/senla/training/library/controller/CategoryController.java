@@ -1,7 +1,7 @@
 package com.senla.training.library.controller;
 
 import com.senla.training.library.dto.CategoryDto;
-import com.senla.training.library.dto.converter.CategoryConverterDto;
+import com.senla.training.library.converter.CategoryConverterDto;
 
 import com.senla.training.library.transfer.New;
 import com.senla.training.library.service.CategoryService;
