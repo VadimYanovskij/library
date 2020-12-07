@@ -29,7 +29,7 @@
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
-<!--        <start-class>com.senla.training.library.LibraryApplication</start-class>-->
+        <start-class>com.senla.training.library.LibraryApplication</start-class>
     </properties>
 
     <dependencies>

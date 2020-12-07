@@ -8,6 +8,7 @@ import com.senla.training.library.service.BookService;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -25,13 +27,16 @@ public class BookController {
     private final BookService bookService;
     private final BookConverterDto bookConverterDto;
     private final BookEditConverterDto bookEditConverterDto;
+    private final MessageSource messageSource;
 
     public BookController(BookService bookService,
                           BookConverterDto bookConverterDto,
-                          BookEditConverterDto bookEditConverterDto) {
+                          BookEditConverterDto bookEditConverterDto,
+                          MessageSource messageSource) {
         this.bookService = bookService;
         this.bookConverterDto = bookConverterDto;
         this.bookEditConverterDto = bookEditConverterDto;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/all")
@@ -130,11 +135,14 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> softDeleteById(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> softDeleteById(@PathVariable("id") Integer id,
+                                                 @RequestParam("locale") Locale locale) {
         log.info("Deleting book by id = {}", id);
         bookService.softDeleteById(id);
         log.info("Book with id = {} deleted successfully", id);
-        return new ResponseEntity<>("The Book deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.DeletedSuccessfully", null, locale),
+                HttpStatus.OK);
     }
 
 }

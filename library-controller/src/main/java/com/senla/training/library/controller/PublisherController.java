@@ -8,6 +8,7 @@ import com.senla.training.library.transfer.New;
 import com.senla.training.library.service.PublisherService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -24,11 +26,14 @@ public class PublisherController {
 
     private final PublisherService publisherService;
     private final PublisherConverterDto publisherConverterDto;
+    private final MessageSource messageSource;
 
     public PublisherController(PublisherService publisherService,
-                               PublisherConverterDto publisherConverterDto) {
+                               PublisherConverterDto publisherConverterDto,
+                               MessageSource messageSource) {
         this.publisherService = publisherService;
         this.publisherConverterDto = publisherConverterDto;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -99,10 +104,13 @@ public class PublisherController {
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteById(@PathVariable("id") Integer id,
+                                             @RequestParam("locale") Locale locale) {
         log.info("Deleting publisher by id = {}", id);
         publisherService.deleteById(id);
         log.info("Publisher with id = {} deleted successfully", id);
-        return new ResponseEntity<>("The Publisher deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.DeletedSuccessfully", null, locale),
+                HttpStatus.OK);
     }
 }

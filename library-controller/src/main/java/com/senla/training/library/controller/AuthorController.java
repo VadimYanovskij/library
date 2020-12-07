@@ -1,13 +1,13 @@
 package com.senla.training.library.controller;
 
 
-
 import com.senla.training.library.converter.AuthorConverterDto;
 import com.senla.training.library.dto.AuthorDto;
 import com.senla.training.library.service.AuthorService;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -25,11 +26,14 @@ public class AuthorController {
 
     private final AuthorService authorService;
     private final AuthorConverterDto authorConverterDto;
+    private final MessageSource messageSource;
 
     public AuthorController(AuthorService authorService,
-                            AuthorConverterDto authorConverterDto) {
+                            AuthorConverterDto authorConverterDto,
+                            MessageSource messageSource) {
         this.authorService = authorService;
         this.authorConverterDto = authorConverterDto;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -100,10 +104,13 @@ public class AuthorController {
 
     @DeleteMapping("/{id}")
     @Secured("ROLE_ADMIN")
-    ResponseEntity<String> deleteById(@PathVariable("id") Integer id) {
+    ResponseEntity<String> deleteById(@PathVariable("id") Integer id,
+                                      @RequestParam("locale") Locale locale) {
         log.info("Deleting author by id = {}", id);
         authorService.deleteById(id);
         log.info("Author with id = {} deleted successfully", id);
-        return new ResponseEntity<>("The Author deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.DeletedSuccessfully", null, locale),
+                HttpStatus.OK);
     }
 }

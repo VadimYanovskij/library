@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>library-main</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>com.senla.training</groupId>
@@ -24,4 +25,16 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+<!--    <build>-->
+<!--        <pluginManagement>-->
+<!--            <plugins>-->
+<!--                <plugin>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                </plugin>-->
+<!--            </plugins>-->
+<!--        </pluginManagement>-->
+
+<!--    </build>-->
 </project>

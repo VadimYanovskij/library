@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,71 +34,107 @@ public class ControllerExceptionHandler {
             @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
         return new ResponseEntity<>(messageSource.getMessage(
-                "label.EntityNotFoundException",null,locale),
+                "label.EntityNotFoundException", null, locale),
                 HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleBookAlreadyDeletedException(
-            BookAlreadyDeletedException exception) {
+            BookAlreadyDeletedException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.BookAlreadyDeletedException", null, locale),
+                HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleHttpMessageNotReadableException(
-            HttpMessageNotReadableException exception) {
+            HttpMessageNotReadableException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.HttpMessageNotReadableException", null, locale),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleEmptyResultDataAccessException(
-            EmptyResultDataAccessException exception) {
+            EmptyResultDataAccessException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.EmptyResultDataAccessException", null, locale),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleDataIntegrityViolationException(
-            DataIntegrityViolationException exception) {
+            DataIntegrityViolationException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.DataIntegrityViolationException", null, locale),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleHttpMediaTypeNotSupportedException(
-            HttpMediaTypeNotSupportedException exception) {
+            HttpMediaTypeNotSupportedException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.HttpMediaTypeNotSupportedException", null, locale),
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleHttpRequestMethodNotSupportedException(
-            HttpRequestMethodNotSupportedException exception) {
+            HttpRequestMethodNotSupportedException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.HttpRequestMethodNotSupportedException", null, locale),
+                HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleIllegalArgumentException(
-            IllegalArgumentException exception) {
+            IllegalArgumentException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.IllegalArgumentException", null, locale),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleBookOutStockException(
-            BookOutStockException exception) {
+            BookOutStockException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.BookOutStockException", null, locale),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handleNoHandlerFoundException(
-            NoHandlerFoundException exception) {
+            NoHandlerFoundException exception,
+            @RequestParam("locale") Locale locale) {
         log.error(exception.getMessage());
-        return new ResponseEntity<>("Requested resource wasn't found on the server",
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.NoHandlerFoundException", null, locale),
                 HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException exception,
+            @RequestParam("locale") Locale locale) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.MissingServletRequestParameterException", null, locale),
+                HttpStatus.BAD_REQUEST);
     }
 }
