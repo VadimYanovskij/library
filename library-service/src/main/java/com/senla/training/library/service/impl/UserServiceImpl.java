@@ -70,9 +70,6 @@ public class UserServiceImpl implements UserService {
             if (user.getBirthday() != null) {
                 updatedUser.setBirthday(user.getBirthday());
             }
-            if (user.getPassword() != null) {
-                throw new IllegalArgumentException("You can't change password there");
-            }
             if (user.getUsername() != null) {
                 throw new IllegalArgumentException("You can't change username there");
             }

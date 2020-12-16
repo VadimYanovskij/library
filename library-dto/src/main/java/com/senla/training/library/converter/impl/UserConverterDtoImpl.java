@@ -27,7 +27,6 @@ public class UserConverterDtoImpl implements UserConverterDto {
         result.setId(user.getId());
         result.setUsername(user.getUsername());
         result.setEmail(user.getEmail());
-        result.setPassword(user.getPassword());
         result.setFirstname(user.getFirstname());
         result.setLastname(user.getLastname());
         result.setBirthday(user.getBirthday());
@@ -44,14 +43,15 @@ public class UserConverterDtoImpl implements UserConverterDto {
         result.setId(userDto.getId());
         result.setUsername(userDto.getUsername());
         result.setEmail(userDto.getEmail());
-        result.setPassword(userDto.getPassword());
         result.setFirstname(userDto.getFirstname());
         result.setLastname(userDto.getLastname());
         result.setBirthday(userDto.getBirthday());
-        result.setRoles(userDto.getRoleIds().stream()
-                .map(id -> roleService.findById(id))
-                .collect(Collectors.toSet())
-        );
+        if (userDto.getRoleIds() != null) {
+            result.setRoles(userDto.getRoleIds().stream()
+                    .map(id -> roleService.findById(id))
+                    .collect(Collectors.toSet())
+            );
+        }
         log.info("UserDto converted successfully");
         return result;
     }

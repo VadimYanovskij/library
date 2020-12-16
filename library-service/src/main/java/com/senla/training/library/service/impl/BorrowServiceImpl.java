@@ -1,6 +1,7 @@
 package com.senla.training.library.service.impl;
 
 import com.senla.training.library.entity.Book;
+import com.senla.training.library.entity.BookStatus;
 import com.senla.training.library.entity.Borrow;
 import com.senla.training.library.enums.BookStatusName;
 import com.senla.training.library.exception.BookAlreadyDeletedException;
@@ -14,9 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -122,14 +124,23 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public List<Borrow> findExpiredBorrows() {
         log.info("Listing expired borrows from database");
-        List<Borrow> result = borrowRepository.findAll().stream()
-                .filter(borrow -> borrow.getBook().getBookStatus() !=
-                        bookStatusService.findByBookStatusName(
-                                BookStatusName.DELETED))
-                .filter(borrow -> borrow.getReturnDate()
-                        .isAfter(borrow.getRepaymentDate()))
-                .collect(Collectors.toList());
-        log.info("Borrows listed successfully from database");
+        BookStatus bookStatusDeleted = bookStatusService.findByBookStatusName(
+                BookStatusName.DELETED);
+        List<Borrow> result = new ArrayList<>();
+        for (Borrow borrow : borrowRepository.findAll()) {
+            if (borrow.getBook().getBookStatus() != bookStatusDeleted) {
+                if (borrow.getReturnDate() == null) {
+                    if (LocalDate.now().isAfter(borrow.getRepaymentDate())) {
+                        result.add(borrow);
+                    }
+                } else {
+                    if (borrow.getReturnDate().isAfter(borrow.getRepaymentDate())) {
+                        result.add(borrow);
+                    }
+                }
+            }
+        }
+        log.info("Expired borrows listed successfully from database");
         return result;
     }
 }

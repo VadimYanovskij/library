@@ -1,4 +1,4 @@
 package com.senla.training.library.transfer;
 
-public interface Details {
+public interface UserDetails {
 }

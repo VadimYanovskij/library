@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -136,5 +137,25 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(messageSource.getMessage(
                 "label.MissingServletRequestParameterException", null, locale),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleAccessDeniedException(
+            AccessDeniedException exception,
+            @RequestParam("locale") Locale locale) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.AccessDeniedException", null, locale),
+                HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handleNullPointerException(
+            NullPointerException exception,
+            @RequestParam("locale") Locale locale) {
+        log.error(exception.getMessage());
+        return new ResponseEntity<>(messageSource.getMessage(
+                "label.NullPointerException", null, locale),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

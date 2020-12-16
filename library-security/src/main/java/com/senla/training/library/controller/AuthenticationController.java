@@ -6,7 +6,7 @@ import com.senla.training.library.dto.TokenDto;
 import com.senla.training.library.dto.UserForRegisterDto;
 import com.senla.training.library.service.BlockedTokenService;
 import com.senla.training.library.service.JwtTokenService;
-import com.senla.training.library.service.JwtUserDetailsService;
+import com.senla.training.library.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -28,20 +28,20 @@ public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenUtil;
-    private final JwtUserDetailsService userDetailsService;
+    private final UserService userService;
     private final BlockedTokenService blockedTokenService;
     private final SecurityDtoConverter securityDtoConverter;
     private final MessageSource messageSource;
 
     public AuthenticationController(AuthenticationManager authenticationManager,
                                     JwtTokenService jwtTokenUtil,
-                                    JwtUserDetailsService userDetailsService,
+                                    UserService userService,
                                     BlockedTokenService blockedTokenService,
                                     SecurityDtoConverter securityDtoConverter,
                                     MessageSource messageSource) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
         this.blockedTokenService = blockedTokenService;
         this.securityDtoConverter = securityDtoConverter;
         this.messageSource = messageSource;
@@ -68,18 +68,21 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<UserForRegisterDto> register(
             @Validated @RequestBody UserForRegisterDto userForRegisterDto,
-            BindingResult bindingResult,
-            @RequestParam(value = "locale", required = false) Locale locale) {
+            BindingResult bindingResult) {
         log.info("Starting registering user with username {}",
                 userForRegisterDto.getUsername());
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("Wrong request body!");
         }
-        userDetailsService.save(userForRegisterDto);
-        ResponseEntity<String> result = new ResponseEntity<>(messageSource.getMessage(
-                "label.UserRegistered", null, locale), HttpStatus.OK);
+        ResponseEntity<UserForRegisterDto> result = new ResponseEntity<>(
+                securityDtoConverter.userToUserForRegisterDto(
+                        userService.add(securityDtoConverter.userForRegisterDtoToUser(
+                                userForRegisterDto)
+                        )
+                ),
+                HttpStatus.OK);
         log.info("User registered successfully");
         return result;
     }

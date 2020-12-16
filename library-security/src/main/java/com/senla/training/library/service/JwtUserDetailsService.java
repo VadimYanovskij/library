@@ -1,7 +1,6 @@
 package com.senla.training.library.service;
 
 import com.senla.training.library.converter.SecurityDtoConverter;
-import com.senla.training.library.dto.UserForRegisterDto;
 import com.senla.training.library.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -40,11 +39,5 @@ public class JwtUserDetailsService implements UserDetailsService {
         );
         log.info("User has loaded successfully");
         return result;
-    }
-
-    public void save(UserForRegisterDto userForRegisterDto) {
-        log.info("Start saving new user, username = {}", userForRegisterDto.getUsername());
-        userService.add(securityDtoConverter.userForRegisterDtoToUser(userForRegisterDto));
-        log.info("New user has saved successfully");
     }
 }

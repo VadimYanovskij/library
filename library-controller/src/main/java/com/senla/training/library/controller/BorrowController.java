@@ -6,7 +6,7 @@ import com.senla.training.library.dto.BorrowHistoryDto;
 import com.senla.training.library.converter.BorrowConverterDto;
 import com.senla.training.library.converter.BorrowHistoryConverterDto;
 import com.senla.training.library.service.BorrowService;
-import com.senla.training.library.transfer.Details;
+import com.senla.training.library.transfer.UserDetails;
 import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class BorrowController {
 
     @GetMapping
     @Secured("ROLE_ADMIN")
-    @JsonView({Details.class})
+    @JsonView({UserDetails.class})
     public ResponseEntity<List<BorrowDto>> findAll() {
         log.info("Listing borrows");
         ResponseEntity<List<BorrowDto>> result = new ResponseEntity<>(
@@ -52,7 +52,6 @@ public class BorrowController {
     }
 
     @GetMapping("/{id}")
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<BorrowDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding borrow with id = {}", id);
         ResponseEntity<BorrowDto> result = new ResponseEntity<>(
@@ -66,7 +65,6 @@ public class BorrowController {
     }
 
     @PostMapping
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<BorrowDto> add(
             @Validated(New.class) @RequestBody BorrowDto borrowDto,
             BindingResult bindingResult) {

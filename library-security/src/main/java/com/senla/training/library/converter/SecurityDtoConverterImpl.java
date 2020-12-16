@@ -43,6 +43,20 @@ public class SecurityDtoConverterImpl implements SecurityDtoConverter {
     }
 
     @Override
+    public UserForRegisterDto userToUserForRegisterDto(User user) {
+        log.info("Converting user to userForRegisterDto");
+        UserForRegisterDto result = new UserForRegisterDto();
+        result.setId(user.getId());
+        result.setUsername(user.getUsername());
+        result.setEmail(user.getEmail());
+        result.setFirstname(user.getFirstname());
+        result.setLastname(user.getLastname());
+        result.setBirthday(user.getBirthday());
+        log.info("User to userForRegisterDto converted successfully");
+        return result;
+    }
+
+    @Override
     public Token tokenDtoToToken(TokenDto tokenDto) {
         log.info("Converting TokenDto to Token");
         Token result = new Token(tokenDto.getToken());

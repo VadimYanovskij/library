@@ -9,5 +9,7 @@ public interface SecurityDtoConverter {
 
     User userForRegisterDtoToUser(UserForRegisterDto userForRegisterDto);
 
+    UserForRegisterDto userToUserForRegisterDto (User user);
+
     Token tokenDtoToToken (TokenDto tokenDto);
 }

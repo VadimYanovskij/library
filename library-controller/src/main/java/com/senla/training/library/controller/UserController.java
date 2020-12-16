@@ -1,15 +1,11 @@
 package com.senla.training.library.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.senla.training.library.dto.RoleDto;
-import com.senla.training.library.dto.UserDto;
 import com.senla.training.library.converter.RoleConverterDto;
 import com.senla.training.library.converter.UserConverterDto;
+import com.senla.training.library.dto.RoleDto;
+import com.senla.training.library.dto.UserDto;
 import com.senla.training.library.service.UserService;
-import com.senla.training.library.transfer.AdminDetails;
-import com.senla.training.library.transfer.Details;
 import com.senla.training.library.transfer.Exist;
-import com.senla.training.library.transfer.New;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +36,6 @@ public class UserController {
 
     @GetMapping
     @Secured("ROLE_ADMIN")
-    @JsonView({AdminDetails.class})
     public ResponseEntity<List<UserDto>> findAll() {
         log.info("Listing users");
         ResponseEntity<List<UserDto>> result = new ResponseEntity<>(
@@ -54,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @JsonView({AdminDetails.class})
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<UserDto> findById(@PathVariable("id") Integer id) {
         log.info("Finding user with id = {}", id);
         ResponseEntity<UserDto> result = new ResponseEntity<>(
@@ -64,28 +59,6 @@ public class UserController {
                 HttpStatus.OK
         );
         log.info("User with id = {} found", id);
-        return result;
-    }
-
-    @PostMapping
-    @Secured("ROLE_ADMIN")
-    @JsonView(Details.class)
-    public ResponseEntity<UserDto> add(
-            @Validated(New.class) @RequestBody UserDto userDto,
-            BindingResult bindingResult) {
-        log.info("Creating user: {}", userDto);
-        if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("Wrong request body!");
-        }
-        ResponseEntity<UserDto> result = new ResponseEntity<>(
-                userConverterDto.entityToDto(
-                        userService.add(
-                                userConverterDto.dtoToEntity(userDto)
-                        )
-                ),
-                HttpStatus.OK
-        );
-        log.info("User created successfully with info: \" {}", userDto);
         return result;
     }
 
