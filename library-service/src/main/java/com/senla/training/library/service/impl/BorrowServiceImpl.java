@@ -78,8 +78,25 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public Borrow update(Borrow borrow) {
         log.info("Updating in database borrow: {}", borrow);
-        if (borrowRepository.findById(borrow.getId()).isPresent()) {
-            Borrow result = borrowRepository.save(borrow);
+        Optional<Borrow> borrowForUpdate = borrowRepository.findById(borrow.getId());
+        if (borrowForUpdate.isPresent()) {
+            Borrow updatedBorrow = borrowForUpdate.get();
+            if (borrow.getUser() != null) {
+                updatedBorrow.setUser(borrow.getUser());
+            }
+            if (borrow.getBook() != null) {
+                updatedBorrow.setBook(borrow.getBook());
+            }
+            if (borrow.getBorrowDate() != null) {
+                updatedBorrow.setBorrowDate(borrow.getBorrowDate());
+            }
+            if (borrow.getRepaymentDate() != null) {
+                updatedBorrow.setRepaymentDate(borrow.getRepaymentDate());
+            }
+            if (borrow.getReturnDate() != null) {
+                updatedBorrow.setReturnDate(borrow.getReturnDate());
+            }
+            Borrow result = borrowRepository.save(updatedBorrow);
             log.info("Borrow updated successfully with info: \" {}", borrow);
             return result;
         } else {

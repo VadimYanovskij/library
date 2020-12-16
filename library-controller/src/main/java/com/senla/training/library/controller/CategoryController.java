@@ -104,7 +104,8 @@ public class CategoryController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") Integer id,
-                                             @RequestParam("locale") Locale locale) {
+                                             @RequestParam(value = "locale",
+                                                     required = false) Locale locale) {
         log.info("Deleting category by id = {}", id);
         categoryService.deleteById(id);
         log.info("Category with id = {} deleted successfully", id);

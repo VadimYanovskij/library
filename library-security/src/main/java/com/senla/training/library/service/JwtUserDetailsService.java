@@ -1,14 +1,13 @@
 package com.senla.training.library.service;
 
-import com.senla.training.library.dto.UserForRegisterDto;
 import com.senla.training.library.converter.SecurityDtoConverter;
+import com.senla.training.library.dto.UserForRegisterDto;
 import com.senla.training.library.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,7 +18,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     private final SecurityDtoConverter securityDtoConverter;
 
     public JwtUserDetailsService(UserService userService,
-                                 PasswordEncoder bcryptEncoder, SecurityDtoConverter securityDtoConverter) {
+                                 SecurityDtoConverter securityDtoConverter) {
         this.userService = userService;
         this.securityDtoConverter = securityDtoConverter;
     }
@@ -29,7 +28,6 @@ public class JwtUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         log.info("Start loading user by username = {}", username);
         User user = userService.findByUsername(username);
-        log.info("User = {}", user);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
@@ -40,7 +38,6 @@ public class JwtUserDetailsService implements UserDetailsService {
                         .toArray(String[]::new)
                 )
         );
-        log.info("UserDetails = {}", result);
         log.info("User has loaded successfully");
         return result;
     }

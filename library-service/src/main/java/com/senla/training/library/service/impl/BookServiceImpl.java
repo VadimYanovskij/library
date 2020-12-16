@@ -118,9 +118,6 @@ public class BookServiceImpl implements BookService {
     public void softDeleteById(Integer id) {
         log.info("Deleting book in database by id = {}", id);
         Book book = findById(id);
-        if (book.getBookStatus().getBookStatusName() == BookStatusName.DELETED) {
-            throw new BookAlreadyDeletedException("Book has already been deleted!");
-        }
         book.setBookStatus(bookStatusService.findByBookStatusName(
                 BookStatusName.DELETED));
         bookRepository.save(book);

@@ -52,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         jwt.ifPresent(token -> {
             log.info("Start validating the access token {}", token);
             try {
-                if (blockedTokenService.findById(token) == null
+                if (blockedTokenService.findById(token).isBlank()
                         && jwtTokenService.validateToken(token)) {
                     setSecurityContext(new WebAuthenticationDetailsSource()
                             .buildDetails(httpServletRequest), token);
@@ -70,9 +70,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         log.info("Start setting the Authentication in the context");
         final String username = jwtTokenService.getUsernameFromToken(token);
         final List<String> roles = jwtTokenService.getRoles(token);
-        final UserDetails userDetails = new User(username, "", roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-        final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-                userDetails.getAuthorities());
+        final UserDetails userDetails = new User(
+                username, "", roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+        final UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(authDetails);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("Current user is authenticated");

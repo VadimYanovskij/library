@@ -22,16 +22,16 @@ public class BorrowDto {
     @NotNull(groups = {Exist.class})
     private Integer id;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     private Integer userId;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     private Integer bookId;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     private LocalDate borrowDate;
 
-    @NotNull(groups = {New.class, Exist.class})
+    @NotNull(groups = {New.class})
     private LocalDate repaymentDate;
 
     private LocalDate returnDate;

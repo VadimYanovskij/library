@@ -136,7 +136,8 @@ public class BookController {
     @DeleteMapping("/{id}")
     @Secured("ROLE_ADMIN")
     public ResponseEntity<String> softDeleteById(@PathVariable("id") Integer id,
-                                                 @RequestParam("locale") Locale locale) {
+                                                 @RequestParam(value = "locale",
+                                                         required = false) Locale locale) {
         log.info("Deleting book by id = {}", id);
         bookService.softDeleteById(id);
         log.info("Book with id = {} deleted successfully", id);

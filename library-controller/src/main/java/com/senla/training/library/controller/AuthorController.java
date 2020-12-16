@@ -105,7 +105,8 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     @Secured("ROLE_ADMIN")
     ResponseEntity<String> deleteById(@PathVariable("id") Integer id,
-                                      @RequestParam("locale") Locale locale) {
+                                      @RequestParam(value = "locale", required = false)
+                                              Locale locale) {
         log.info("Deleting author by id = {}", id);
         authorService.deleteById(id);
         log.info("Author with id = {} deleted successfully", id);

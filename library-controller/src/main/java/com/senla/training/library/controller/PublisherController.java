@@ -105,7 +105,8 @@ public class PublisherController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable("id") Integer id,
-                                             @RequestParam("locale") Locale locale) {
+                                             @RequestParam(value = "locale",
+                                                     required = false) Locale locale) {
         log.info("Deleting publisher by id = {}", id);
         publisherService.deleteById(id);
         log.info("Publisher with id = {} deleted successfully", id);

@@ -27,7 +27,7 @@ public class BlockedTokenServiceImpl implements BlockedTokenService {
             return result.get().toString();
         } else {
             log.info("Token not found in database");
-            return null;
+            return "";
         }
     }
 
