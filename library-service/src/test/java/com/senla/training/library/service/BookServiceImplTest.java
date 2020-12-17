@@ -164,21 +164,21 @@ public class BookServiceImplTest {
 
     @Test
     public void whenUpdateBook_thenBookSaveInDb() {
-        Author kuk = new Author(1, "Глен", "Кук");
-        Publisher ast = new Publisher(1, "АСТ", "Москва");
-        Category fantasy = new Category(2, 1, "Фентези");
+        Author kuk = new Author(1, "Glen", "Kuk");
+        Publisher ast = new Publisher(1, "AST", "Moscow");
+        Category fantasy = new Category(2, 1, "Fantasy");
 
-        Book bookForUpdate = new Book(5, "Чёрный отряд", Set.of(kuk), ast,
+        Book bookForUpdate = new Book(5, "the Black Company", Set.of(kuk), ast,
                 1997, fantasy, inStock);
 
         when(bookRepository.findById(bookForUpdate.getId()))
                 .thenReturn(Optional.of(bookForUpdate));
 
-        Author cixin = new Author(2, "Лю", "Цысинь");
-        Publisher fanzon = new Publisher(1, "Fanzon", "Москва");
-        Category scienceFiction = new Category(3, 1, "Фантастика");
+        Author cixin = new Author(2, "Liu", "Cixin");
+        Publisher fanzon = new Publisher(1, "Fanzon", "Moscow");
+        Category scienceFiction = new Category(3, 1, "Science Fiction");
 
-        bookForUpdate.setName("Задача трех тел");
+        bookForUpdate.setName("Three-Body Problem");
         bookForUpdate.setAuthors(Set.of(cixin));
         bookForUpdate.setPublisher(fanzon);
         bookForUpdate.setPublicationYear(2017);
