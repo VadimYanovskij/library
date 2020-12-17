@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class BookStatusServiceImpl implements BookStatusService {
@@ -20,6 +23,12 @@ public class BookStatusServiceImpl implements BookStatusService {
         this.bookStatusRepository = bookStatusRepository;
     }
 
+    /**
+     * Finds a book status in the database by id.
+     * If book status not found throw EntityNotFoundException.
+     *
+     * @return BookStatus
+     */
     @Override
     public BookStatus findById(Integer id) {
         log.info("Finding book status with id = {} in database", id);
@@ -32,6 +41,12 @@ public class BookStatusServiceImpl implements BookStatusService {
         }
     }
 
+    /**
+     * Finds a book status in the database by bookStatusName.
+     * If book status not found throw EntityNotFoundException.
+     *
+     * @return BookStatus
+     */
     @Override
     public BookStatus findByBookStatusName(BookStatusName bookStatusName) {
         log.info("Finding book status with bookStatusName = {} in database",

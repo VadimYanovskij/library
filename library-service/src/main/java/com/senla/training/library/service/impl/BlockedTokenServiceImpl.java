@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class BlockedTokenServiceImpl implements BlockedTokenService {
@@ -18,6 +21,12 @@ public class BlockedTokenServiceImpl implements BlockedTokenService {
         this.blockedTokenRepository = blockedTokenRepository;
     }
 
+    /**
+     * Finds a token in the database by id.
+     * If token not found return empty string.
+     *
+     * @return String
+     */
     @Override
     public String findById(String id) {
         log.info("Finding token with id = {} in database", id);
@@ -31,6 +40,11 @@ public class BlockedTokenServiceImpl implements BlockedTokenService {
         }
     }
 
+    /**
+     * Save the token to the database
+     *
+     * @return saved Token
+     */
     @Override
     public Token add(Token token) {
         log.info("Creating in database blocked token: {}", token);

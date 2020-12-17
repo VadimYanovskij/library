@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class BookServiceImpl implements BookService {
@@ -27,6 +30,11 @@ public class BookServiceImpl implements BookService {
         this.bookStatusService = bookStatusService;
     }
 
+    /**
+     * Finds all books in the database
+     *
+     * @return list of Book
+     */
     @Override
     public List<Book> findAll() {
         log.info("Listing all books from database");
@@ -35,6 +43,11 @@ public class BookServiceImpl implements BookService {
         return result;
     }
 
+    /**
+     * Finds all not deleted books in the database
+     *
+     * @return list of Book
+     */
     @Override
     public List<Book> findAllNotDeletedBooks() {
         log.info("Listing books without deleted from database");
@@ -46,6 +59,13 @@ public class BookServiceImpl implements BookService {
         return result;
     }
 
+    /**
+     * Finds a not deleted book in the database by id.
+     * If book not found throw EntityNotFoundException.
+     * If book has DELETED status throw BookAlreadyDeletedException.
+     *
+     * @return Book
+     */
     @Override
     public Book findById(Integer id) {
         log.info("Finding book with id = {} in database", id);
@@ -62,6 +82,12 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    /**
+     * Finds a book in the database by id.
+     * If book not found throw EntityNotFoundException.
+     *
+     * @return Book
+     */
     @Override
     public Book findByIdWithDeleted(Integer id) {
         log.info("Finding book (WithDeleted) with id = {} in database", id);
@@ -74,6 +100,11 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    /**
+     * Save the book to the database.
+     *
+     * @return saved Book with id
+     */
     @Override
     public Book add(Book book) {
         log.info("Creating in database book: {}", book);
@@ -82,6 +113,12 @@ public class BookServiceImpl implements BookService {
         return result;
     }
 
+    /**
+     * Update the book in the database.
+     * If book not found throw EntityNotFoundException.
+     *
+     * @return updated Book
+     */
     @Override
     public Book update(Book book) {
         log.info("Updating in database book: {}", book);
@@ -114,6 +151,9 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    /**
+     * Finds a book by id and change status to DELETED and save in the database.
+     */
     @Override
     public void softDeleteById(Integer id) {
         log.info("Deleting book in database by id = {}", id);

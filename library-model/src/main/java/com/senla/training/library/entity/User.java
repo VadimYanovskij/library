@@ -8,6 +8,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * Persistent class for entity stored in table "user"
+ *
+ * @author Vadim Yanovskij
+ */
 @Entity
 @Data
 @NoArgsConstructor

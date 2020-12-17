@@ -7,7 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Spring JPA Repository for Role
+ *
+ * @author Vadim Yanovskij
+ */
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
+
     Optional<Role> findByRoleName (RoleName roleName);
 }

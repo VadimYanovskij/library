@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class BorrowServiceImpl implements BorrowService {
@@ -36,6 +39,11 @@ public class BorrowServiceImpl implements BorrowService {
         this.bookStatusService = bookStatusService;
     }
 
+    /**
+     * Finds all borrows in the database
+     *
+     * @return list of Borrow
+     */
     @Override
     public List<Borrow> findAll() {
         log.info("Listing borrows from database");
@@ -44,6 +52,12 @@ public class BorrowServiceImpl implements BorrowService {
         return result;
     }
 
+    /**
+     * Finds a borrow in the database by id.
+     * If borrow not found throw EntityNotFoundException.
+     *
+     * @return Borrow
+     */
     @Override
     public Borrow findById(Integer id) {
         log.info("Finding borrow with id = {} in database", id);
@@ -56,6 +70,13 @@ public class BorrowServiceImpl implements BorrowService {
         }
     }
 
+    /**
+     * Save the borrow to the database.
+     * If borrowed book has OUT_STOCK status throw BookOutStockException.
+     * If borrowed book has DELETED status throw BookAlreadyDeletedException.
+     *
+     * @return saved Borrow with id
+     */
     @Override
     @Transactional
     public Borrow add(Borrow borrow) {
@@ -77,6 +98,12 @@ public class BorrowServiceImpl implements BorrowService {
         return result;
     }
 
+    /**
+     * Update the borrow in the database.
+     * If borrow not found throw EntityNotFoundException.
+     *
+     * @return updated Borrow
+     */
     @Override
     public Borrow update(Borrow borrow) {
         log.info("Updating in database borrow: {}", borrow);
@@ -106,6 +133,12 @@ public class BorrowServiceImpl implements BorrowService {
         }
     }
 
+    /**
+     * Finds all borrows in the database by book id.
+     * If book not found throw EntityNotFoundException.
+     *
+     * @return list of Borrow
+     */
     @Override
     public List<Borrow> findAllByBookId(Integer bookId) {
         log.info("Listing borrows history of book with id = {} from database",
@@ -121,6 +154,11 @@ public class BorrowServiceImpl implements BorrowService {
         }
     }
 
+    /**
+     * Finds expired borrows in the database.
+     *
+     * @return list of Borrow
+     */
     @Override
     public List<Borrow> findExpiredBorrows() {
         log.info("Listing expired borrows from database");

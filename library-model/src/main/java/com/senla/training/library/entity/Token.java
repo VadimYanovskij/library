@@ -9,6 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Persistent class for entity stored in table "blocked_token"
+ *
+ * @author Vadim Yanovskij
+ */
 @Entity
 @Data
 @NoArgsConstructor

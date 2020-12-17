@@ -3,6 +3,7 @@ package com.senla.training.library.controller;
 import com.senla.training.library.dto.CategoryDto;
 import com.senla.training.library.converter.CategoryConverterDto;
 
+import com.senla.training.library.transfer.Exist;
 import com.senla.training.library.transfer.New;
 import com.senla.training.library.service.CategoryService;
 
@@ -83,7 +84,7 @@ public class CategoryController {
 
     @PutMapping
     public ResponseEntity<CategoryDto> update(
-            @Validated(New.class) @RequestBody CategoryDto categoryDto,
+            @Validated(Exist.class) @RequestBody CategoryDto categoryDto,
             BindingResult bindingResult) {
         log.info("Updating category: {}", categoryDto);
         if (bindingResult.hasErrors()) {

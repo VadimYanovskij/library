@@ -10,6 +10,9 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class PublisherServiceImpl implements PublisherService {
@@ -20,6 +23,11 @@ public class PublisherServiceImpl implements PublisherService {
         this.publisherRepository = publisherRepository;
     }
 
+    /**
+     * Finds all publishers in the database
+     *
+     * @return list of Publisher
+     */
     @Override
     public List<Publisher> findAll() {
         log.info("Listing publishers from database");
@@ -28,6 +36,12 @@ public class PublisherServiceImpl implements PublisherService {
         return result;
     }
 
+    /**
+     * Finds a publisher in the database by id.
+     * If user not found throw EntityNotFoundException.
+     *
+     * @return Publisher
+     */
     @Override
     public Publisher findById(Integer id) {
         log.info("Finding publisher with id = {} in database", id);
@@ -40,6 +54,11 @@ public class PublisherServiceImpl implements PublisherService {
         }
     }
 
+    /**
+     * Save the publisher to the database
+     *
+     * @return saved Publisher with id
+     */
     @Override
     public Publisher add(Publisher publisher) {
         log.info("Creating in database publisher: {}", publisher);
@@ -48,6 +67,12 @@ public class PublisherServiceImpl implements PublisherService {
         return result;
     }
 
+    /**
+     * Update the publisher in the database.
+     * If publisher not found throw EntityNotFoundException.
+     *
+     * @return updated User
+     */
     @Override
     public Publisher update(Publisher publisher) {
         log.info("Updating in database publisher: {}", publisher);
@@ -60,6 +85,9 @@ public class PublisherServiceImpl implements PublisherService {
         }
     }
 
+    /**
+     * Delete a publisher in the database by id.
+     */
     @Override
     public void deleteById(Integer id) {
         log.info("Deleting publisher in database by id = {}", id);

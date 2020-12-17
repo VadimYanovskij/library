@@ -1,5 +1,10 @@
 package com.senla.training.library.exception;
 
+/**
+ * Indicates a deleted book.
+ *
+ * @author Vadim Yanovskij
+ */
 public class BookAlreadyDeletedException extends RuntimeException{
 
     public BookAlreadyDeletedException() {

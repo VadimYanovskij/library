@@ -1,5 +1,10 @@
 package com.senla.training.library.exception;
 
+/**
+ * Indicates a out of stock book.
+ *
+ * @author Vadim Yanovskij
+ */
 public class BookOutStockException extends RuntimeException{
     public BookOutStockException() {
     }

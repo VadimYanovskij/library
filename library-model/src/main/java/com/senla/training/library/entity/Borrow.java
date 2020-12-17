@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Persistent class for entity stored in table "borrow"
+ *
+ * @author Vadim Yanovskij
+ */
 @Entity
 @Data
 @NoArgsConstructor

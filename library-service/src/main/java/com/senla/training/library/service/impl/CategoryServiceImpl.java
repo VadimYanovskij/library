@@ -10,6 +10,9 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -20,6 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * Finds all categories in the database
+     *
+     * @return list of Category
+     */
     @Override
     public List<Category> findAll() {
         log.info("Listing categories from database");
@@ -28,6 +36,12 @@ public class CategoryServiceImpl implements CategoryService {
         return result;
     }
 
+    /**
+     * Finds a category in the database by id.
+     * If category not found throw EntityNotFoundException.
+     *
+     * @return Category
+     */
     @Override
     public Category findById(Integer id) {
         log.info("Finding category with id = {} in database", id);
@@ -40,6 +54,11 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * Save the category to the database
+     *
+     * @return saved Category with id
+     */
     @Override
     public Category add(Category category) {
         log.info("Creating in database category: {}", category);
@@ -48,13 +67,20 @@ public class CategoryServiceImpl implements CategoryService {
         return result;
     }
 
+
+    /**
+     * Update the category in the database.
+     * If category or parent category not found throw EntityNotFoundException.
+     *
+     * @return updated User
+     */
     @Override
     public Category update(Category category) {
         log.info("Updating in database category: {}", category);
-        if (!categoryRepository.findById(category.getId()).isPresent()) {
+        if (categoryRepository.findById(category.getId()).isEmpty()) {
             throw new EntityNotFoundException("Category not found");
         }
-        if (!categoryRepository.findById(category.getParentId()).isPresent()) {
+        if (category.getParentId() != null && categoryRepository.findById(category.getParentId()).isEmpty()) {
             throw new EntityNotFoundException("Parent category not found");
         }
         Category result = categoryRepository.save(category);
@@ -62,6 +88,9 @@ public class CategoryServiceImpl implements CategoryService {
         return result;
     }
 
+    /**
+     * Delete a category in the database by id.
+     */
     @Override
     public void deleteById(Integer id) {
         log.info("Deleting category in database by id = {}", id);

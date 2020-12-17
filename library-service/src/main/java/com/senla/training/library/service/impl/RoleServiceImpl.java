@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -20,6 +23,12 @@ public class RoleServiceImpl implements RoleService {
         this.repository = repository;
     }
 
+    /**
+     * Finds a role in the database by roleName.
+     * If role not found throw EntityNotFoundException.
+     *
+     * @return Role
+     */
     @Override
     public Role findByRoleName(RoleName roleName) {
         log.info("Finding role with roleName = {} in database", roleName);
@@ -32,6 +41,12 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
+    /**
+     * Finds a role in the database by id.
+     * If role not found throw EntityNotFoundException.
+     *
+     * @return Role
+     */
     @Override
     public Role findById(Integer id) {
         log.info("Finding role with id = {} in database", id);

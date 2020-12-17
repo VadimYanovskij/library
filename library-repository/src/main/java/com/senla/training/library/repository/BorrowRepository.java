@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Spring JPA Repository for Borrow
+ *
+ * @author Vadim Yanovskij
+ */
 @Repository
 public interface BorrowRepository extends JpaRepository<Borrow, Integer> {
 

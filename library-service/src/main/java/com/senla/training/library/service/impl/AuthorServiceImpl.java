@@ -10,6 +10,9 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -20,6 +23,11 @@ public class AuthorServiceImpl implements AuthorService {
         this.authorRepository = authorRepository;
     }
 
+    /**
+     * Finds all authors in the database
+     *
+     * @return list of Author
+     */
     @Override
     public List<Author> findAll() {
         log.info("Listing authors from database");
@@ -28,6 +36,12 @@ public class AuthorServiceImpl implements AuthorService {
         return result;
     }
 
+    /**
+     * Finds an author in the database by id.
+     * If author not found throw EntityNotFoundException.
+     *
+     * @return Author
+     */
     @Override
     public Author findById(Integer id) {
         log.info("Finding author with id = {} in database", id);
@@ -40,6 +54,11 @@ public class AuthorServiceImpl implements AuthorService {
         }
     }
 
+    /**
+     * Save the author to the database
+     *
+     * @return saved Author with id
+     */
     @Override
     public Author add(Author author) {
         log.info("Creating in database author: {}", author);
@@ -48,10 +67,16 @@ public class AuthorServiceImpl implements AuthorService {
         return result;
     }
 
+    /**
+     * Update the author in the database.
+     * If author or parent category not found throw EntityNotFoundException.
+     *
+     * @return updated Author
+     */
     @Override
     public Author update(Author author) {
         log.info("Updating in database author: {}", author);
-        if (!authorRepository.findById(author.getId()).isPresent()) {
+        if (authorRepository.findById(author.getId()).isEmpty()) {
             throw new EntityNotFoundException("Author not found in database");
         }
         Author result = authorRepository.save(author);
@@ -59,6 +84,9 @@ public class AuthorServiceImpl implements AuthorService {
         return result;
     }
 
+    /**
+     * Delete an author in the database by id.
+     */
     @Override
     public void deleteById(Integer id) {
         log.info("Deleting author in database by id = {}", id);

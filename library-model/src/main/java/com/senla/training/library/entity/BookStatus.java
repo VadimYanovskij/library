@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Persistent class for entity stored in table "book_status"
+ *
+ * @author Vadim Yanovskij
+ */
 @Entity
 @Data
 @NoArgsConstructor

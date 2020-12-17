@@ -4,7 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 
-
+/**
+ * Persistent class for entity stored in table "author"
+ *
+ * @author Vadim Yanovskij
+ */
 @Entity
 @Data
 @NoArgsConstructor

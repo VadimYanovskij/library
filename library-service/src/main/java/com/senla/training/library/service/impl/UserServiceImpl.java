@@ -12,6 +12,9 @@ import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @author Vadim Yanovskij
+ */
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,6 +27,11 @@ public class UserServiceImpl implements UserService {
         this.roleService = roleService;
     }
 
+    /**
+     * Finds all users in the database
+     *
+     * @return list of User
+     */
     @Override
     public List<User> findAll() {
         log.info("Listing users from database");
@@ -32,6 +40,12 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    /**
+     * Finds a user in the database by id.
+     * If user not found throw EntityNotFoundException.
+     *
+     * @return User
+     */
     @Override
     public User findById(Integer id) {
         log.info("Finding user with id = {} in database", id);
@@ -44,6 +58,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Save the user to the database
+     *
+     * @return saved User with id
+     */
     @Override
     public User add(User user) {
         log.info("Creating in database user with username = {}", user.getUsername());
@@ -52,6 +71,13 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    /**
+     * Update the user info in the database.
+     * If user not found throw EntityNotFoundException.
+     * Username and roles cannot be changed. Throw IllegalArgumentException.
+     *
+     * @return updated User
+     */
     @Override
     public User update(User user) {
         log.info("Updating in database user with id = {}", user.getId());
@@ -84,6 +110,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Finds a user in the database by username.
+     * If user not found throw EntityNotFoundException.
+     *
+     * @return User
+     */
     @Override
     public User findByUsername(String userName) {
         log.info("Finding user with userName = {} in database", userName);
@@ -97,6 +129,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Performs a quick check to see what roles the new user could be assigned to.
+     *
+     * @return list of roles for the user
+     */
     @Override
     public List<Role> setRoles(String userName, Set<Integer> roleIds) {
         log.info("Setting roles: {} for user: {} in database", roleIds, userName);

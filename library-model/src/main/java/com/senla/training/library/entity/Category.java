@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Persistent class for entity stored in table "category"
+ *
+ * @author Vadim Yanovskij
+ */
 @Entity
 @Data
 @NoArgsConstructor
