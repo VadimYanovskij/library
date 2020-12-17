@@ -8,15 +8,6 @@ SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS = 0;
 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE =
         'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
--- -----------------------------------------------------
--- Schema library
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema library
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8;
-USE `library`;
 
 -- -----------------------------------------------------
 -- Table `library`.`author`
@@ -28,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `library`.`author`
     `lastname`  VARCHAR(45) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB;
 
 
@@ -42,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `library`.`publisher`
     `publisher_city` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB;
 
 
@@ -56,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `library`.`category`
     `category_name` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB;
 
 
@@ -70,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `library`.`book_status`
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
     UNIQUE INDEX `book_status_name_UNIQUE` (`book_status_name` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB;
 
 
@@ -91,21 +82,21 @@ CREATE TABLE IF NOT EXISTS `library`.`book`
     INDEX `fk_book_category_idx` (`category_id` ASC) VISIBLE,
     INDEX `fk_book_book_status_idx` (`book_status_id` ASC) VISIBLE,
     CONSTRAINT `fk_book_publisher`
-        FOREIGN KEY (`publisher_id`)
-            REFERENCES `library`.`publisher` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT,
+    FOREIGN KEY (`publisher_id`)
+    REFERENCES `library`.`publisher` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT,
     CONSTRAINT `fk_book_category`
-        FOREIGN KEY (`category_id`)
-            REFERENCES `library`.`category` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT,
+    FOREIGN KEY (`category_id`)
+    REFERENCES `library`.`category` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT,
     CONSTRAINT `fk_book_book_status`
-        FOREIGN KEY (`book_status_id`)
-            REFERENCES `library`.`book_status` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT
-)
+    FOREIGN KEY (`book_status_id`)
+    REFERENCES `library`.`book_status` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT
+    )
     ENGINE = InnoDB;
 
 
@@ -125,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `library`.`user`
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
     UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
     UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB;
 
 
@@ -145,16 +136,16 @@ CREATE TABLE IF NOT EXISTS `library`.`borrow`
     INDEX `fk_borrow_book_idx` (`book_id` ASC) VISIBLE,
     INDEX `fk_borrow_user_idx` (`user_id` ASC) VISIBLE,
     CONSTRAINT `fk_borrow_book`
-        FOREIGN KEY (`book_id`)
-            REFERENCES `library`.`book` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT,
+    FOREIGN KEY (`book_id`)
+    REFERENCES `library`.`book` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT,
     CONSTRAINT `fk_borrow_user`
-        FOREIGN KEY (`user_id`)
-            REFERENCES `library`.`user` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT
-)
+    FOREIGN KEY (`user_id`)
+    REFERENCES `library`.`user` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT
+    )
     ENGINE = InnoDB;
 
 
@@ -168,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `library`.`role`
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
     UNIQUE INDEX `role_name_UNIQUE` (`role_name` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB;
 
 
@@ -182,16 +173,16 @@ CREATE TABLE IF NOT EXISTS `library`.`user_role`
     INDEX `fk_user_role_user_idx` (`user_id` ASC) VISIBLE,
     INDEX `fk_user_role_role_idx` (`role_id` ASC) VISIBLE,
     CONSTRAINT `fk_user_role_user`
-        FOREIGN KEY (`user_id`)
-            REFERENCES `library`.`user` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT,
+    FOREIGN KEY (`user_id`)
+    REFERENCES `library`.`user` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT,
     CONSTRAINT `fk_user_role_role`
-        FOREIGN KEY (`role_id`)
-            REFERENCES `library`.`role` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT
-)
+    FOREIGN KEY (`role_id`)
+    REFERENCES `library`.`role` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT
+    )
     ENGINE = InnoDB;
 
 
@@ -205,16 +196,16 @@ CREATE TABLE IF NOT EXISTS `library`.`author_book`
     INDEX `fk_author_book_author_idx` (`author_id` ASC) VISIBLE,
     INDEX `fk_author_book_book_idx` (`book_id` ASC) VISIBLE,
     CONSTRAINT `fk_author_book_author`
-        FOREIGN KEY (`author_id`)
-            REFERENCES `library`.`author` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT,
+    FOREIGN KEY (`author_id`)
+    REFERENCES `library`.`author` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT,
     CONSTRAINT `fk_author_book_book`
-        FOREIGN KEY (`book_id`)
-            REFERENCES `library`.`book` (`id`)
-            ON DELETE SET NULL
-            ON UPDATE RESTRICT
-)
+    FOREIGN KEY (`book_id`)
+    REFERENCES `library`.`book` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT
+    )
     ENGINE = InnoDB;
 
 
@@ -226,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `library`.`blocked_token`
     `id` VARCHAR(256) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
-)
+    )
     ENGINE = InnoDB;
 
 
